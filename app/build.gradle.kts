@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.mapsplatform.secrets.plugin)
     alias(libs.plugins.pacepal.android.application.compose)
+    alias(libs.plugins.mapsplatform.secrets.plugin)
 }
 
 android {

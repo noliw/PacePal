@@ -22,5 +22,9 @@ gradlePlugin {
             id = "pacepal.android.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
+        register("androidLibrary") {
+            id = "pacepal.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
     }
 }
