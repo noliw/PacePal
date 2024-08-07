@@ -1,4 +1,4 @@
 package com.nolawiworkineh.auth.domain
 
-class MyClass {
+class Test {
 }
