@@ -2,7 +2,6 @@ import com.android.build.api.dsl.LibraryExtension
 import com.nolawiworkineh.convention.ExtensionType
 import com.nolawiworkineh.convention.configureKotlinAndroid
 import com.nolawiworkineh.convention.configureBuildTypes
-import com.nolawiworkineh.convention.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
