@@ -42,5 +42,9 @@ gradlePlugin {
             id = "pacepal.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("jvmKtor") {
+            id = "pacepal.jvm.ktor"
+            implementationClass = "JvmKtorConventionPlugin"
+        }
     }
 }

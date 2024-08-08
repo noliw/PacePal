@@ -1,6 +1,6 @@
 [versions]
-agp = "8.2.2"
-androidTools = "31.2.2"
+agp = "8.4.2"
+androidTools = "31.5.1"
 androidxJunit = "1.2.1"
 appcompatVersion = "1.7.0"
 core = "1.10.3"
@@ -135,6 +135,8 @@ pacepal-android-library-compose = { id = "pacepal.android.library.compose", vers
 pacepal-android-feature-ui = { id = "pacepal.android.feature.ui", version = "unspecified" }
 pacepal-android-room = { id = "pacepal.android.room", version = "unspecified" }
 pacepal-jvm-library = { id = "pacepal.jvm.library", version = "unspecified" }
+pacepal-jvm-ktor = { id = "pacepal.jvm.ktor", version = "unspecified" }
+
 
 [bundles]
 compose = [
@@ -152,3 +154,11 @@ compose-debug = [
 ]
 koin = ["koin-core", "koin-android", "koin-android-workmanager"]
 koin-compose = ["koin-core", "koin-android", "koin-android-workmanager", "koin-androidx-compose"]
+ktor = [
+    "ktor-client-auth",
+    "ktor-client-cio",
+    "ktor-client-content-negotiation",
+    "ktor-client-core",
+    "ktor-client-logging",
+    "ktor-serialization-kotlinx-json"
+]
