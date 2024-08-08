@@ -132,3 +132,21 @@ pacepal-android-application = { id = "pacepal.android.application", version = "u
 pacepal-android-application-compose = { id = "pacepal.android.application.compose", version = "unspecified"}
 pacepal-android-library = { id = "pacepal.android.library", version = "unspecified"}
 pacepal-android-library-compose = { id = "pacepal.android.library.compose", version = "unspecified"}
+pacepal-android-feature-ui = { id = "pacepal.android.feature.ui", version = "unspecified" }
+
+[bundles]
+compose = [
+    "androidx-activity-compose",
+    "androidx-lifecycle-runtime-compose",
+    "androidx-lifecycle-viewmodel-compose",
+    "androidx-compose-material3",
+    "androidx-compose-ui",
+    "androidx-compose-ui-graphics",
+    "androidx-compose-ui-tooling-preview",
+]
+compose-debug = [
+    "androidx-compose-ui-tooling",
+    "androidx-compose-ui-test-manifest",
+]
+koin = ["koin-core", "koin-android", "koin-android-workmanager"]
+koin-compose = ["koin-core", "koin-android", "koin-android-workmanager", "koin-androidx-compose"]
