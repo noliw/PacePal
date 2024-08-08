@@ -133,6 +133,7 @@ pacepal-android-application-compose = { id = "pacepal.android.application.compos
 pacepal-android-library = { id = "pacepal.android.library", version = "unspecified"}
 pacepal-android-library-compose = { id = "pacepal.android.library.compose", version = "unspecified"}
 pacepal-android-feature-ui = { id = "pacepal.android.feature.ui", version = "unspecified" }
+pacepal-android-room = { id = "pacepal.android.room", version = "unspecified" }
 
 [bundles]
 compose = [
