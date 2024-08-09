@@ -1,7 +1,10 @@
 package com.nolawiworkineh.core.domain.util
 
-sealed interface DataError: Error {
-    enum class Network: DataError {
+// This sealed interface defines specific errors related to data operations.
+sealed interface DataError : Error {
+
+    // This enum defines various network-related errors that can occur during data operations.
+    enum class Network : DataError {
         REQUEST_TIMEOUT,
         UNAUTHORIZED,
         CONFLICT,
@@ -13,7 +16,8 @@ sealed interface DataError: Error {
         UNKNOWN_ERROR
     }
 
-    enum class Local: DataError {
+    // This enum defines errors related to local storage issues.
+    enum class Local : DataError {
         DISK_FULL
     }
 }
