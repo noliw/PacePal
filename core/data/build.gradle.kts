@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.pacepal.android.library)
+    alias(libs.plugins.pacepal.jvm.ktor)
+
 }
 
 android {
