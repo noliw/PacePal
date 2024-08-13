@@ -57,23 +57,31 @@ suspend inline fun <reified Response: Any> HttpClient.delete(
     }
 }
 
+// **Function safeCall**: Safely executes an HTTP request, handling any errors that occur.
 suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): Result<T, DataError.Network> {
+    // **Attempts to execute the HTTP request**: Tries to get a response from the server.
     val response = try {
         execute()
+        // **Catches UnresolvedAddressException**: Handles cases where the device cannot resolve the server's address.
     } catch(e: UnresolvedAddressException) {
         e.printStackTrace()
         return Result.Error(DataError.Network.NO_INTERNET_CONNECTION)
+        // **Catches SerializationException**: Handles cases where the response cannot be correctly parsed into the expected format.
     } catch (e: SerializationException) {
         e.printStackTrace()
         return Result.Error(DataError.Network.SERIALIZATION_ERROR)
+        // **Catches any other Exception**: Handles all other unexpected errors, except for CancellationException.
     } catch(e: Exception) {
         if(e is CancellationException) throw e
         e.printStackTrace()
         return Result.Error(DataError.Network.UNKNOWN_ERROR)
     }
 
+    // **Converts the HTTP response to a Result object**: Uses the responseToResult function to handle the response.
     return responseToResult(response)
 }
+
+
 
 // **Converts an HTTP response to a Result object**: Handles success and various error cases.
 suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<T, DataError.Network>  {
