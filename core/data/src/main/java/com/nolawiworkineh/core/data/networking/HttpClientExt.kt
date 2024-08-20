@@ -1,5 +1,6 @@
 package com.nolawiworkineh.core.data.networking
 
+
 import com.nolawiworkineh.core.data.BuildConfig
 import com.nolawiworkineh.core.domain.util.DataError
 import com.nolawiworkineh.core.domain.util.Result
@@ -43,19 +44,25 @@ suspend inline fun <reified Request, reified Response: Any> HttpClient.post(
     }
 }
 
+// **Function delete**: Sends an HTTP DELETE request to remove a resource from the server.
 suspend inline fun <reified Response: Any> HttpClient.delete(
     route: String,
     queryParameters: Map<String, Any?> = mapOf()
 ): Result<Response, DataError.Network> {
+    // **Calls safeCall to execute the DELETE request safely**: Wraps the request in error handling.
     return safeCall {
+        // **Constructs and sends the DELETE request**.
         delete {
+            // **Sets the URL for the request**: Combines the base URL with the specified route.
             url(constructRoute(route))
+            // **Adds query parameters to the request**: Includes additional data in the URL.
             queryParameters.forEach { (key, value) ->
                 parameter(key, value)
             }
         }
     }
 }
+
 
 // **Function safeCall**: Safely executes an HTTP request, handling any errors that occur.
 suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): Result<T, DataError.Network> {
