@@ -18,13 +18,18 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerializationException
 
 
+// **Function get**: Sends an HTTP GET request to retrieve data from the server.
 suspend inline fun <reified Response: Any> HttpClient.get(
     route: String,
     queryParameters: Map<String, Any?> = mapOf()
 ): Result<Response, DataError.Network> {
+    // **Calls safeCall to execute the GET request safely**: Wraps the request in error handling.
     return safeCall {
+        // **Constructs and sends the GET request**.
         get {
+            // **Sets the URL for the request**: Combines the base URL with the specified route.
             url(constructRoute(route))
+            // **Adds query parameters to the request**: Includes additional data in the URL.
             queryParameters.forEach { (key, value) ->
                 parameter(key, value)
             }
@@ -32,17 +37,24 @@ suspend inline fun <reified Response: Any> HttpClient.get(
     }
 }
 
+
+// **Function post**: Sends an HTTP POST request to submit data to the server.
 suspend inline fun <reified Request, reified Response: Any> HttpClient.post(
     route: String,
     body: Request
 ): Result<Response, DataError.Network> {
+    // **Calls safeCall to execute the POST request safely**: Wraps the request in error handling.
     return safeCall {
+        // **Constructs and sends the POST request**.
         post {
+            // **Sets the URL for the request**: Combines the base URL with the specified route.
             url(constructRoute(route))
+            // **Sets the body of the request**: Attaches the data to be sent to the server.
             setBody(body)
         }
     }
 }
+
 
 // **Function delete**: Sends an HTTP DELETE request to remove a resource from the server.
 suspend inline fun <reified Response: Any> HttpClient.delete(
