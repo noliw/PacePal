@@ -5,11 +5,13 @@ import androidx.compose.ui.graphics.Color
 
 
 val PacePalBlue = Color(0xFF007AFF)
+val PacePalDeepBlue = Color(0xFF09467c)
 val PacePalBlue30 = Color(0x4D007AFF)
 val PacePalBlue10 = Color(0x1A007AFF)
 val PacePalBlue5 = Color(0x0D007AFF)
 val PacePalBlack = Color(0xFF080707)
 val PacePalGray = Color(0xFF87938C)
+val PacePalLightGray = Color(0xFF9E9E9E)
 val PacePalGray40 = Color(0x6687938C)
 val PacePalDarkGray = Color(0xFF232624)
 val PacePalWhite = Color(0xFFFAFAFA)
