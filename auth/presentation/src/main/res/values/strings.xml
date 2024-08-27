@@ -5,4 +5,7 @@
     <string name="pacepal_description">Track your runs, set ambitious goals, and conquer your fitness journey with ease using our intuitive app.</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
 </resources>
