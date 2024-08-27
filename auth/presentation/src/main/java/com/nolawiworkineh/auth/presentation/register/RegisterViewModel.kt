@@ -9,10 +9,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
+// **RegisterViewModel Class**: Manages the state and actions for the registration screen.
 class RegisterViewModel: ViewModel() {
-    var state by mutableStateOf(RegisterState())
-    private set
 
+    // **State Property**: Holds the current state of the registration screen.
+    var state by mutableStateOf(RegisterState())
+        private set // **Private Setter**: Prevents external modification of the state directly.
+
+    // **onAction Function**: Handles user actions on the registration screen.
     fun onAction(action: RegisterAction) {
 
     }
