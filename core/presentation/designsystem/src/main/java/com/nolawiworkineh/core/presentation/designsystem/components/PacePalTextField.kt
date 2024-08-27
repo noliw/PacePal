@@ -44,42 +44,59 @@ import com.nolawiworkineh.core.presentation.designsystem.CheckIcon
 import com.nolawiworkineh.core.presentation.designsystem.EmailIcon
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 
+// **PacePalTextField Function**: Creates a custom text field with additional features like icons and error handling.
 @Composable
 fun PacePalTextField(
+    // **State**: Represents the current state of the text field, including the input text.
     state: TextFieldState,
+    // **Start Icon**: Optional icon to display at the beginning of the text field.
     startIcon: ImageVector?,
+    // **End Icon**: Optional icon to display at the end of the text field.
     endIcon: ImageVector?,
+    // **Hint**: Placeholder text that appears when the text field is empty.
     hint: String,
+    // **Title**: Optional title displayed above the text field.
     title: String?,
+    // **Modifier**: Allows customization of the text field’s layout and appearance.
     modifier: Modifier = Modifier,
+    // **Error**: Optional error message displayed when the input is invalid.
     error: String? = null,
+    // **Keyboard Type**: Specifies the type of keyboard to use (e.g., text, number, email).
     keyboardType: KeyboardType = KeyboardType.Text,
+// **Additional Info**: Optional extra information displayed next to the title.
     additionalInfo: String? = null
 ) {
+    // **Focus State**: Tracks whether the text field is currently focused.
     var isFocused by remember {
         mutableStateOf(false)
     }
+
+    // **Column**: Arranges the title, text field, and error/additional info vertically.
     Column(
         modifier = modifier
     ) {
+        // **Row**: Arranges the title and error/additional info horizontally.
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // **Title**: Displays the title if provided.
             if(title != null) {
                 Text(
                     text = title,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            // **Error Message**: Displays the error message if provided.
             if(error != null) {
                 Text(
                     text = error,
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 12.sp
                 )
+                // **Additional Info**: Displays additional info if no error is present.
             } else if(additionalInfo != null) {
                 Text(
                     text = additionalInfo,
@@ -88,7 +105,10 @@ fun PacePalTextField(
                 )
             }
         }
+        // **Spacer**: Adds vertical spacing between the title row and the text field.
         Spacer(modifier = Modifier.height(4.dp))
+
+        // **BasicTextField2**: Custom implementation of the text field.
         BasicTextField2(
             state = state,
             textStyle = LocalTextStyle.current.copy(
@@ -129,6 +149,7 @@ fun PacePalTextField(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // **Start Icon**: Displays the start icon if provided.
                     if(startIcon != null) {
                         Icon(
                             imageVector = startIcon,
@@ -137,6 +158,7 @@ fun PacePalTextField(
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
+                    // **Hint and Input**: Displays the hint when the text field is empty and unfocused.
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -152,6 +174,7 @@ fun PacePalTextField(
                         }
                         innerBox()
                     }
+                    // **End Icon**: Displays the end icon if provided.
                     if(endIcon != null) {
                         Spacer(modifier = Modifier.width(16.dp))
                         Icon(
@@ -167,6 +190,7 @@ fun PacePalTextField(
         )
     }
 }
+
 
 @Preview
 @Composable
