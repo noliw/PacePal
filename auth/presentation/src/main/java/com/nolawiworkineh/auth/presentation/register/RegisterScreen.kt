@@ -18,11 +18,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -33,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nolawiworkineh.auth.domain.PasswordValidationState
+import com.nolawiworkineh.auth.domain.UserDataValidator
 import com.nolawiworkineh.auth.presentation.R
 import com.nolawiworkineh.core.presentation.designsystem.CheckIcon
 import com.nolawiworkineh.core.presentation.designsystem.CrossIcon
@@ -43,24 +42,30 @@ import com.nolawiworkineh.core.presentation.designsystem.PacePalGray
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.PacePalWhite
 import com.nolawiworkineh.core.presentation.designsystem.Poppins
-import com.nolawiworkineh.core.presentation.designsystem.components.GradientBackground
 import com.nolawiworkineh.core.presentation.designsystem.VerticalSpacer
+import com.nolawiworkineh.core.presentation.designsystem.components.GradientBackground
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalActionButton
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalPasswordTextField
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalTextField
 import org.koin.androidx.compose.koinViewModel
 
+// **RegisterScreenRoot Composable**: The root composable for the registration screen in the Pacepal app.
 @Composable
 fun RegisterScreenRoot(
+    // **ViewModel Injection**: Injects the RegisterViewModel using Koin dependency injection.
     viewModel: RegisterViewModel = koinViewModel(),
+    // **Sign-In Callback**: A lambda function that handles navigation to the sign-in screen.
     onSignInClick: () -> Unit,
+// **Success Callback**: A lambda function that handles actions after successful registration.
     onSuccessfulRegistration: () -> Unit
 ) {
+    // **RegisterScreen Composable**: The main UI composable for the registration screen.
     RegisterScreen(
-        state = viewModel.state,
-        onAction = viewModel::onAction
+        state = viewModel.state, // **State Propagation**: Passes the current state of the registration screen from the ViewModel.
+        onAction = viewModel::onAction // **Action Handling**: Passes the ViewModel's action handler to the UI.
     )
 }
+
 
 @Composable
 
@@ -121,9 +126,7 @@ private fun RegisterScreen(
             PacePalTextField(
                 state = state.email,
                 startIcon = EmailIcon,
-                endIcon = if (state.isEmailValid) {
-                    CheckIcon
-                } else null,
+                endIcon = if (state.isEmailValid) CheckIcon else null,
                 hint = stringResource(id = R.string.example_email),
                 title = stringResource(id = R.string.email),
                 modifier = Modifier.fillMaxWidth(),
@@ -162,7 +165,7 @@ private fun RegisterScreen(
                 text = stringResource(
                     id = R.string.contains_lowercase_char,
                 ),
-                isValid = state.passwordValidationState.hasLowerCaseCharacter
+                isValid = state.passwordValidationState.hasLowercase
             )
             Spacer(modifier = Modifier.height(4.dp))
             PasswordRequirement(
