@@ -229,7 +229,7 @@ fun PacePalTextField(
 
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PacePalTextFieldPreview() {
     PacePalTheme {
