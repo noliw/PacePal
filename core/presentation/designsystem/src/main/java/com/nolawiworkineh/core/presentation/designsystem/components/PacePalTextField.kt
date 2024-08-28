@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,144 +42,181 @@ import androidx.compose.ui.unit.sp
 import com.nolawiworkineh.core.presentation.designsystem.CheckIcon
 import com.nolawiworkineh.core.presentation.designsystem.EmailIcon
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
+import com.nolawiworkineh.core.presentation.designsystem.VerticalSpacer
 
 // **PacePalTextField Function**: Creates a custom text field with additional features like icons and error handling.
 @Composable
+// **PacePalTextField Function**: A custom text field composable for the Pacepal app.
 fun PacePalTextField(
-    // **State**: Represents the current state of the text field, including the input text.
-    state: TextFieldState,
-    // **Start Icon**: Optional icon to display at the beginning of the text field.
-    startIcon: ImageVector?,
-    // **End Icon**: Optional icon to display at the end of the text field.
-    endIcon: ImageVector?,
-    // **Hint**: Placeholder text that appears when the text field is empty.
-    hint: String,
-    // **Title**: Optional title displayed above the text field.
-    title: String?,
-    // **Modifier**: Allows customization of the text field’s layout and appearance.
-    modifier: Modifier = Modifier,
-    // **Error**: Optional error message displayed when the input is invalid.
-    error: String? = null,
-    // **Keyboard Type**: Specifies the type of keyboard to use (e.g., text, number, email).
-    keyboardType: KeyboardType = KeyboardType.Text,
-// **Additional Info**: Optional extra information displayed next to the title.
-    additionalInfo: String? = null
+    state: TextFieldState, // **State**: Holds the current text and other properties of the text field.
+    startIcon: ImageVector?, // **Start Icon**: An optional icon displayed at the beginning of the text field.
+    endIcon: ImageVector?, // **End Icon**: An optional icon displayed at the end of the text field.
+    hint: String, // **Hint**: A placeholder text shown when the text field is empty.
+    title: String?, // **Title**: An optional label displayed above the text field.
+    modifier: Modifier = Modifier, // **Modifier**: Allows for custom styling and layout modifications.
+    error: String? = null, // **Error**: An optional error message displayed when the input is invalid.
+    keyboardType: KeyboardType = KeyboardType.Text, // **Keyboard Type**: Specifies the type of keyboard to be shown.
+    additionalInfo: String? = null // **Additional Info**: An optional informational message displayed above the text field.
 ) {
-    // **Focus State**: Tracks whether the text field is currently focused.
     var isFocused by remember {
+        // **Focus State**: Tracks whether the text field is currently focused.
         mutableStateOf(false)
     }
-
-    // **Column**: Arranges the title, text field, and error/additional info vertically.
     Column(
+        // **Column Layout**: Arranges the text field and associated components vertically.
         modifier = modifier
     ) {
-        // **Row**: Arranges the title and error/additional info horizontally.
         Row(
+            // **Row Layout**: Arranges the title and error/additional info horizontally.
             modifier = Modifier
                 .fillMaxWidth(),
+            // **Arrangement**: Distributes space between components.
             horizontalArrangement = Arrangement.SpaceBetween,
+            // **Alignment**: Vertically centers the components in the row.
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // **Title**: Displays the title if provided.
+            // if the title is not null, display the title
             if(title != null) {
                 Text(
+                    // **Title Text**: Displays the label above the text field.
                     text = title,
+                    // **Title Color**: Uses the appropriate color from the theme.
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            // **Error Message**: Displays the error message if provided.
+            // if there is an error or additional info, display them
             if(error != null) {
                 Text(
+                    // **Error Text**: Displays the error message in a specific style.
                     text = error,
+                    // **Error Color**: Uses the error color from the theme.
                     color = MaterialTheme.colorScheme.error,
+                    // **Error Font Size**: Sets the font size for the error text.
                     fontSize = 12.sp
                 )
-                // **Additional Info**: Displays additional info if no error is present.
             } else if(additionalInfo != null) {
                 Text(
+                    // **Additional Info Text**: Displays additional information.
                     text = additionalInfo,
+                    // **Info Color**: Uses a muted color from the theme.
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    // **Info Font Size**: Sets the font size for the additional information.
                     fontSize = 12.sp
                 )
             }
         }
-        // **Spacer**: Adds vertical spacing between the title row and the text field.
-        Spacer(modifier = Modifier.height(4.dp))
-
-        // **BasicTextField2**: Custom implementation of the text field.
+        VerticalSpacer(height = 4) // **Spacer**: Adds vertical space between components.
         BasicTextField2(
+            // **Text Field State**: Binds the state of the text field.
+            // **State**: Holds the current text and other properties of the text field.
             state = state,
             textStyle = LocalTextStyle.current.copy(
+                // **Text Style**: Applies the current theme's text style.
                 color = MaterialTheme.colorScheme.onBackground
             ),
+            // **Keyboard Options**: Configures the keyboard type (e.g., text, number).
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType
             ),
+            // **Line Limit**: Restricts input to a single line.
             lineLimits = TextFieldLineLimits.SingleLine,
+            // **Cursor Color**: Sets the color of the text cursor.
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp)) // **Shape**: Rounds the corners of the text field.
+                // **Background Color**: Applies a background color based on focus.
                 .background(
+                    // if the text field is focused, use a slightly transparent color
                     if (isFocused) {
                         MaterialTheme.colorScheme.primary.copy(
+                            // **Focus Background**: Changes background color when focused.
                             alpha = 0.05f
                         )
+                        // otherwise, use the surface color
                     } else {
+                        // **Default Background**: Uses the surface color when not focused.
                         MaterialTheme.colorScheme.surface
                     }
                 )
                 .border(
-                    width = 1.dp,
+                    width = 1.dp, // **Border Width**: Sets the width of the border.
+                    // **Border Color**: Configures the border color based on focus.
+                    // if the text field is focused, use the primary color
                     color = if (isFocused) {
+                        // **Focus Border Color**: Changes border color when focused.
                         MaterialTheme.colorScheme.primary
                     } else {
+                        // **Default Border Color**: No visible border when not focused.
                         Color.Transparent
                     },
+                    // **Border Shape**: Applies the rounded shape to the border.
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(12.dp)
+                .padding(12.dp) // **Padding**: Adds padding inside the text field.
+                // onFocusChanged: Callback triggered when the focus state changes.
                 .onFocusChanged {
-                    isFocused = it.isFocused
+                    // **Focus State**: Tracks whether the text field is currently focused.
+                    // **Focus Change**: Updates the focus state when focus changes.
+                    isFocused =
+                        it.isFocused
                 },
+            // decorator: Decorates the inner content of the text field.
+            // simply it changes the layout of the text field.
             decorator = { innerBox ->
+                // **Decorator Row**: Layout for the icons and text inside the text field.
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    // **Alignment**: Centers the content vertically.
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // **Start Icon**: Displays the start icon if provided.
+                    // if there is a start icon, display it
                     if(startIcon != null) {
                         Icon(
+                            // **Start Icon**: Displays the start icon if provided.
                             imageVector = startIcon,
+                            // **Description**: Omits content description for this icon.
                             contentDescription = null,
+                            // **Icon Tint**: Uses a theme color for the icon.
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        // **Spacer**: Adds horizontal space between the icon and text.
                         Spacer(modifier = Modifier.width(16.dp))
                     }
-                    // **Hint and Input**: Displays the hint when the text field is empty and unfocused.
+                    // this is the actual text field
                     Box(
+                        // **Weight Modifier**: Allows the text area to fill the remaining space.
                         modifier = Modifier
                             .weight(1f)
                     ) {
+                        // if the text field is empty and not focused, display the hint
                         if(state.text.isEmpty() && !isFocused) {
                             Text(
+                                //  Displays the hint when the text field is empty and unfocused.
                                 text = hint,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                    // Makes the hint text partially transparent.
                                     alpha = 0.4f
                                 ),
+                                // **Hint Modifier**: Fills the width of the text area.
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
+                        // **Inner Box**: Placeholder for the actual text input.
+                        // this is where the user types
                         innerBox()
                     }
-                    // **End Icon**: Displays the end icon if provided.
                     if(endIcon != null) {
+                        // **Spacer**: Adds space between the text and the end icon.
                         Spacer(modifier = Modifier.width(16.dp))
                         Icon(
+                            // **End Icon**: Displays the end icon if provided.
                             imageVector = endIcon,
+                            // **Description**: Omits content description for this icon.
                             contentDescription = null,
+                            // **Icon Tint**: Uses a theme color for the icon.
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            // **Icon Padding**: Adds padding around the end icon.
                             modifier = Modifier
                                 .padding(end = 8.dp)
                         )
@@ -190,6 +226,7 @@ fun PacePalTextField(
         )
     }
 }
+
 
 
 @Preview

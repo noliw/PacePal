@@ -28,7 +28,7 @@ import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.PacePalWhite
 import com.nolawiworkineh.core.presentation.designsystem.Poppins
 import com.nolawiworkineh.core.presentation.designsystem.components.GradientBackground
-import com.nolawiworkineh.presentation.ui.VerticalSpacer
+import com.nolawiworkineh.core.presentation.designsystem.VerticalSpacer
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

@@ -1,4 +1,4 @@
-package com.nolawiworkineh.presentation.ui
+package com.nolawiworkineh.core.presentation.designsystem
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
