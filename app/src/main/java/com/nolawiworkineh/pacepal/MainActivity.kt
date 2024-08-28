@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nolawiworkineh.auth.presentation.intro.IntroScreen
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.R
 
@@ -28,8 +27,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             PacePalTheme {
 
-                    IntroScreen{
-                }
             }
         }
     }

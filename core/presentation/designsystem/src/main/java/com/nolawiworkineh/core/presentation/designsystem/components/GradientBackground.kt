@@ -79,7 +79,7 @@ fun GradientBackground(
         )
         // **Column to hold content**: Places the screen content inside the gradient background.
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .then(
                     // **Adjusts for system bars if no toolbar**: Adds padding to avoid system bars.
