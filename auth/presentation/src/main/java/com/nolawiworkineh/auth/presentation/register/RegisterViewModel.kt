@@ -38,7 +38,8 @@ class RegisterViewModel(
         state.password.textAsFlow()
             .onEach { password -> // **onEach**: Executes the given block of code for each new value emitted by the flow.
                 state = state.copy( // **state.copy()**: Creates a new state object with updated properties.
-                    passwordValidationState = userDataValidator.validatePassword(password.toString()) // **validatePassword**: Validates the password and updates the state.
+                    // **validatePassword**: Validates the password and updates the state.
+                    passwordValidationState = userDataValidator.validatePassword(password.toString())
                 )
             }
             .launchIn(viewModelScope) // **launchIn**: Launches the flow in the ViewModel's coroutine scope.
