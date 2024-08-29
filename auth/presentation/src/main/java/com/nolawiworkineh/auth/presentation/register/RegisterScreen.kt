@@ -135,99 +135,128 @@ private fun RegisterScreen(
                 }
             )
             VerticalSpacer(height = 60)
-            
+
+            // **PacePalTextField Composable**: A custom text field for email input.
             PacePalTextField(
-                state = state.email,
-                startIcon = EmailIcon,
-                endIcon = if (state.isEmailValid) CheckIcon else null,
-                hint = stringResource(id = R.string.example_email),
-                title = stringResource(id = R.string.email),
-                modifier = Modifier.fillMaxWidth(),
-                additionalInfo = stringResource(id = R.string.must_be_a_valid_email),
-                keyboardType = KeyboardType.Email
+                state = state.email, // **State Parameter**: Provides the current state of the email text field.
+                startIcon = EmailIcon, // **Start Icon**: Displays an email icon at the start of the text field.
+                endIcon = if (state.isEmailValid) CheckIcon else null, // **End Icon**: Shows a check icon if the email is valid, otherwise no icon.
+                hint = stringResource(id = R.string.example_email), // **Hint Text**: Provides a hint for what to enter in the text field.
+                title = stringResource(id = R.string.email), // **Title Text**: Labels the text field as "Email."
+                modifier = Modifier.fillMaxWidth(), // **Modifier**: Makes the text field occupy the full width of its container.
+                additionalInfo = stringResource(id = R.string.must_be_a_valid_email), // **Additional Info**: Shows additional guidance if the email is not valid.
+                keyboardType = KeyboardType.Email // **Keyboard Type**: Configures the keyboard to show email-specific characters.
             )
+
+// **Spacer Composable**: Adds vertical space between the email and password fields.
             Spacer(modifier = Modifier.height(32.dp))
+
+// **PacePalPasswordTextField Composable**: A custom text field for password input.
             PacePalPasswordTextField(
-                state = state.password,
-                isPasswordVisible = state.isPasswordVisible,
+                state = state.password, // **State Parameter**: Provides the current state of the password text field.
+                isPasswordVisible = state.isPasswordVisible, // **Password Visibility**: Indicates whether the password should be visible.
                 onTogglePasswordVisibility = {
-                    onAction(RegisterAction.OnTogglePasswordVisibilityClick)
+                    onAction(RegisterAction.OnTogglePasswordVisibilityClick) // **Password Toggle Action**: Calls a function to toggle password visibility.
                 },
-                hint = stringResource(id = R.string.password),
-                title = stringResource(id = R.string.password),
-                modifier = Modifier.fillMaxWidth()
+                hint = stringResource(id = R.string.password), // **Hint Text**: Provides a hint for what to enter in the text field.
+                title = stringResource(id = R.string.password), // **Title Text**: Labels the text field as "Password."
+                modifier = Modifier.fillMaxWidth() // **Modifier**: Makes the text field occupy the full width of its container.
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
+            // **PasswordRequirement for Minimum Length**: Checks if the password meets the minimum length requirement.
             PasswordRequirement(
                 text = stringResource(
-                    id = R.string.at_least_x_characters,
-                    UserDataValidator.MIN_PASSWORD_LENGTH
+                    id = R.string.at_least_x_characters, // **Text Resource**: Provides the requirement text from resources.
+                    UserDataValidator.MIN_PASSWORD_LENGTH // **Minimum Length**: Inserts the minimum password length into the text.
                 ),
-                isValid = state.passwordValidationState.hasMinLength
+                isValid = state.passwordValidationState.hasMinLength // **Validation Check**: Indicates whether the password meets the minimum length.
             )
+
+// **Spacer Composable**: Adds vertical space between password requirements.
             Spacer(modifier = Modifier.height(4.dp))
+
+// **PasswordRequirement for Number Inclusion**: Checks if the password includes at least one number.
             PasswordRequirement(
                 text = stringResource(
-                    id = R.string.at_least_one_number,
+                    id = R.string.at_least_one_number, // **Text Resource**: Provides the requirement text from resources.
                 ),
-                isValid = state.passwordValidationState.hasNumber
+                isValid = state.passwordValidationState.hasNumber // **Validation Check**: Indicates whether the password includes a number.
             )
+
+// **Spacer Composable**: Adds vertical space between password requirements.
             Spacer(modifier = Modifier.height(4.dp))
+
+// **PasswordRequirement for Lowercase Inclusion**: Checks if the password includes a lowercase letter.
             PasswordRequirement(
                 text = stringResource(
-                    id = R.string.contains_lowercase_char,
+                    id = R.string.contains_lowercase_char, // **Text Resource**: Provides the requirement text from resources.
                 ),
-                isValid = state.passwordValidationState.hasLowercase
+                isValid = state.passwordValidationState.hasLowercase // **Validation Check**: Indicates whether the password includes a lowercase letter.
             )
+
+// **Spacer Composable**: Adds vertical space between password requirements.
             Spacer(modifier = Modifier.height(4.dp))
+
+// **PasswordRequirement for Uppercase Inclusion**: Checks if the password includes an uppercase letter.
             PasswordRequirement(
                 text = stringResource(
-                    id = R.string.contains_uppercase_char,
+                    id = R.string.contains_uppercase_char, // **Text Resource**: Provides the requirement text from resources.
                 ),
-                isValid = state.passwordValidationState.hasUppercase
+                isValid = state.passwordValidationState.hasUppercase // **Validation Check**: Indicates whether the password includes an uppercase letter.
             )
+
+// **Spacer Composable**: Adds vertical space before the register button.
             Spacer(modifier = Modifier.height(32.dp))
+
+// **PacePalActionButton Composable**: The button that triggers the registration process.
             PacePalActionButton(
-                text = stringResource(id = R.string.register),
-                isLoading = state.isRegistering,
-                enabled = state.canRegister,
-                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.register), // **Button Text**: Sets the button label to "Register."
+                isLoading = state.isRegistering, // **Loading State**: Indicates whether the registration is in progress.
+                enabled = state.canRegister, // **Button Enablement**: Enables the button if all registration criteria are met.
+                modifier = Modifier.fillMaxWidth(), // **Modifier**: Makes the button occupy the full width of its container.
                 onClick = {
-                    onAction(RegisterAction.OnRegisterClick)
+                    onAction(RegisterAction.OnRegisterClick) // **Button Click Action**: Triggers the registration process when clicked.
                 }
             )
         }
     }
 }
 
+// **PasswordRequirement Composable**: Displays a password requirement with an icon indicating whether it is met.
 @Composable
 fun PasswordRequirement(
-    text: String,
-    isValid: Boolean,
-    modifier: Modifier = Modifier
+    text: String, // **Text Parameter**: The descriptive text of the password requirement.
+    isValid: Boolean, // **Validation Status**: Indicates whether the requirement is met.
+    modifier: Modifier = Modifier // **Modifier Parameter**: Allows customization of the composable’s layout and appearance.
 ) {
+    // **Row Layout**: Aligns the icon and text horizontally.
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier, // **Modifier**: Applies any external styling or layout instructions.
+        verticalAlignment = Alignment.CenterVertically // **Vertical Alignment**: Aligns the icon and text vertically at the center.
     ) {
+        // **Icon Display**: Shows a check icon if the requirement is met, otherwise a cross icon.
         Icon(
             imageVector = if (isValid) {
-                CheckIcon
+                CheckIcon // **Check Icon**: Indicates the requirement is met.
             } else {
-                CrossIcon
+                CrossIcon // **Cross Icon**: Indicates the requirement is not met.
             },
-            contentDescription = null,
-            tint = if(isValid) PacePalBlue else PacePalDarkRed
+            contentDescription = null, // **Content Description**: No description provided for accessibility purposes.
+            tint = if(isValid) PacePalBlue else PacePalDarkRed // **Tint**: Colors the icon blue if valid, red if invalid.
         )
+        // **Spacer Composable**: Adds horizontal space between the icon and text.
         Spacer(modifier = Modifier.width(16.dp))
+        // **Text Composable**: Displays the password requirement description.
         Text(
-            text = text,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 14.sp
+            text = text, // **Text**: The password requirement description.
+            color = MaterialTheme.colorScheme.onSurfaceVariant, // **Text Color**: Uses the appropriate color from the theme.
+            fontSize = 14.sp // **Font Size**: Sets the font size to 14 sp for readability.
         )
     }
 }
+
 
 
 @Preview(showBackground = true)
