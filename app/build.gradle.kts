@@ -63,6 +63,9 @@ dependencies {
     // Timber
     implementation(libs.timber)
 
+    // koin
+    implementation(libs.bundles.koin)
+
     implementation(projects.auth.data)
     implementation(projects.auth.domain)
     implementation(projects.auth.presentation)
