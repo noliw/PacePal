@@ -31,15 +31,15 @@ import com.nolawiworkineh.core.presentation.designsystem.components.PacePalOutli
 // **IntroScreenRoot Composable Function**: A root composable that wraps the IntroScreen and handles navigation.
 @Composable
 fun IntroScreenRoot(
-    onSignUp: () -> Unit, // **Callback for Sign Up Action**: Triggers navigation or other logic when Sign Up is clicked.
-    onSignIn: () -> Unit // **Callback for Sign In Action**: Triggers navigation or other logic when Sign In is clicked.
+    onSignUpClick: () -> Unit, // **Callback for Sign Up Action**: Triggers navigation or other logic when Sign Up is clicked.
+    onSignInClick: () -> Unit // **Callback for Sign In Action**: Triggers navigation or other logic when Sign In is clicked.
 ) {
     // **IntroScreen Composable**: The actual screen UI, with its actions handled by the root.
     IntroScreen(
         onAction = { action ->
             when (action) {
-                IntroAction.OnSignUpClick -> onSignUp() // **Handle Sign Up**: Calls the onSignUp callback when Sign Up is clicked.
-                IntroAction.OnSignInClick -> onSignIn() // **Handle Sign In**: Calls the onSignIn callback when Sign In is clicked.
+                IntroAction.OnSignUpClick -> onSignUpClick() // **Handle Sign Up**: Calls the onSignUp callback when Sign Up is clicked.
+                IntroAction.OnSignInClick -> onSignInClick() // **Handle Sign In**: Calls the onSignIn callback when Sign In is clicked.
             }
         }
     )

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.R
 
@@ -26,6 +27,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PacePalTheme {
+                // **Create the navigation controller**: This controller will manage navigation between different screens.
+                val navController = rememberNavController()
+                // **Set up the navigation root**: This connects the navigation controller to the navigation graph.
+                NavigationRoot(navController = navController)
 
             }
         }
