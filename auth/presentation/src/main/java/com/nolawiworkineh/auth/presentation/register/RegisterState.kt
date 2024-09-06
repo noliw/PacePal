@@ -21,6 +21,6 @@ data class RegisterState(
     // **Registering State**: Indicates whether the app is currently registering the user.
     val isRegistering: Boolean = false,
     // **Can Register**: Indicates whether the user can proceed with registration.
-    val canRegister: Boolean = passwordValidationState.isValidPassword && !isRegistering
+    val canRegister: Boolean = false
 )
 

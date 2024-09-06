@@ -28,8 +28,11 @@ class RegisterViewModel(
         // **Email Validation Flow**: Observes changes in the email text and updates the validation status.
         state.email.textAsFlow()
             .onEach { email -> // **onEach**: Executes the given block of code for each new value emitted by the flow.
+                val isEmailValid = userDataValidator.isValidEmail(email.toString()) // **isValidEmail**: Validates the email.
                 state = state.copy( // **state.copy()**: Creates a new state object with updated properties.
-                    isEmailValid = userDataValidator.isValidEmail(email.toString()) // **isValidEmail**: Validates the email and updates the state.
+                    isEmailValid = isEmailValid, // **isValidEmail**: Validates the email and updates the state.
+                    // **canRegister**: Determines if registration is possible based on email and password validation.
+                    canRegister = isEmailValid && state.passwordValidationState.isValidPassword && !state.isRegistering
                 )
             }
             .launchIn(viewModelScope) // **launchIn**: Launches the flow in the ViewModel's coroutine scope.
@@ -37,9 +40,12 @@ class RegisterViewModel(
         // **Password Validation Flow**: Observes changes in the password text and updates the validation status.
         state.password.textAsFlow()
             .onEach { password -> // **onEach**: Executes the given block of code for each new value emitted by the flow.
+                val passwordValidationState = userDataValidator.validatePassword(password.toString()) // **validatePassword**: Validates the password.
                 state = state.copy( // **state.copy()**: Creates a new state object with updated properties.
                     // **validatePassword**: Validates the password and updates the state.
-                    passwordValidationState = userDataValidator.validatePassword(password.toString())
+                    passwordValidationState = passwordValidationState,
+                    // **canRegister**: Determines if registration is possible based on email and password validation.
+                    canRegister = state.isEmailValid && passwordValidationState.isValidPassword && !state.isRegistering
                 )
             }
             .launchIn(viewModelScope) // **launchIn**: Launches the flow in the ViewModel's coroutine scope.

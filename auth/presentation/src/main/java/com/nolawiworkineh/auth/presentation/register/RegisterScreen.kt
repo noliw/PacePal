@@ -84,7 +84,7 @@ private fun RegisterScreen(
                 .fillMaxSize() // **Fill Max Size**: Ensures the column takes up the full screen size.
                 .padding(horizontal = 16.dp) // **Horizontal Padding**: Adds padding on the left and right sides of the screen.
                 .padding(vertical = 32.dp) // **Vertical Padding**: Adds padding at the top and bottom of the screen.
-                .padding(top = 48.dp) // **Top Padding**: Adds additional padding at the top of the screen.
+                .padding(top = 16.dp) // **Top Padding**: Adds additional padding at the top of the screen.
         ) {
             // **Title Text**: Displays the "Create Account" title on the registration screen.
             Text(
@@ -134,7 +134,7 @@ private fun RegisterScreen(
                     }
                 }
             )
-            VerticalSpacer(height = 60)
+            VerticalSpacer(height = 48)
 
             // **PacePalTextField Composable**: A custom text field for email input.
             PacePalTextField(
@@ -144,12 +144,12 @@ private fun RegisterScreen(
                 hint = stringResource(id = R.string.example_email), // **Hint Text**: Provides a hint for what to enter in the text field.
                 title = stringResource(id = R.string.email), // **Title Text**: Labels the text field as "Email."
                 modifier = Modifier.fillMaxWidth(), // **Modifier**: Makes the text field occupy the full width of its container.
-                additionalInfo = stringResource(id = R.string.must_be_a_valid_email), // **Additional Info**: Shows additional guidance if the email is not valid.
+                additionalInfo = stringResource(id = R.string.enter_valid_email), // **Additional Info**: Shows additional guidance if the email is not valid.
                 keyboardType = KeyboardType.Email // **Keyboard Type**: Configures the keyboard to show email-specific characters.
             )
 
 // **Spacer Composable**: Adds vertical space between the email and password fields.
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
 // **PacePalPasswordTextField Composable**: A custom text field for password input.
             PacePalPasswordTextField(

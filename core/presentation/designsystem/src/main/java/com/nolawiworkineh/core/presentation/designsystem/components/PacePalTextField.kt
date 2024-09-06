@@ -215,7 +215,7 @@ fun PacePalTextField(
                             // **Description**: Omits content description for this icon.
                             contentDescription = null,
                             // **Icon Tint**: Uses a theme color for the icon.
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            tint = MaterialTheme.colorScheme.primary,
                             // **Icon Padding**: Adds padding around the end icon.
                             modifier = Modifier
                                 .padding(end = 8.dp)
