@@ -1,0 +1,51 @@
+package com.nolawiworkineh.core.data.networking
+
+import com.nolawiworkineh.core.data.BuildConfig
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import timber.log.Timber
+
+// **HttpClientFactory Class**: A factory class responsible for creating an instance of HttpClient.
+class HttpClientFactory {
+
+    // **build Function**: Creates and configures an instance of HttpClient.
+    fun build(): HttpClient {
+        return HttpClient(CIO) {  // CIO engine is used to make non-blocking HTTP requests.
+
+            // **ContentNegotiation**: This is installed to handle JSON serialization and deserialization.
+            install(ContentNegotiation) {
+                json(
+                    json = Json {
+                        ignoreUnknownKeys = true  // Allows the client to ignore unknown fields in JSON responses.
+                    }
+                )
+            }
+
+            // **Logging**: Logs all HTTP request and response information using Timber for debugging purposes.
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Timber.d(message)  // Logs the message using Timber's debug level.
+                    }
+                }
+                level = LogLevel.ALL  // Logs all HTTP details: headers, bodies, etc.
+            }
+
+            // **defaultRequest Block**: Adds default settings to every request made with this client.
+            defaultRequest {
+                contentType(ContentType.Application.Json)  // Ensures all requests expect JSON.
+                header("x-api-key", BuildConfig.API_KEY)  // Adds the API key from BuildConfig to every request.
+            }
+        }
+    }
+}
