@@ -31,11 +31,14 @@ class RegisterViewModel(
 ) : ViewModel() { // **Inherits from ViewModel**: Allows the class to survive configuration changes and manage UI-related data.
 
 
-    // **State Property**: Holds the current state of the registration screen.
+    // **State Property**: Holds the current state of the registration screen. (email, password, etc.)
     var state by mutableStateOf(RegisterState()) // **mutableStateOf**: A state holder that allows reactive updates to the UI.
+        // the state can only be modified from inside the ViewModel (private setter).
         private set // **Private Setter**: Prevents external modification of the state directly.
 
+    // **eventChannel**: A channel that sends one-time events like success or errors back to the UI.
     private val eventChannel = Channel<RegisterEvent>()
+    // **events**: This exposes the eventChannel as a Flow, which the UI listens to for events like success or error.
     val events = eventChannel.receiveAsFlow()
 
     init { // **init Block**: Executes when the ViewModel is first created.
@@ -65,40 +68,56 @@ class RegisterViewModel(
             .launchIn(viewModelScope) // **launchIn**: Launches the flow in the ViewModel's coroutine scope.
     }
 
-    // **onAction Function**: Handles user actions on the registration screen.
+    // **onAction function**: Handles all actions that can be triggered from the UI.
     fun onAction(action: RegisterAction) {
-        when (action) {
+        when(action) {
+            // **OnRegisterClick**: Calls the register function when the user clicks the register button.
             RegisterAction.OnRegisterClick -> register()
+
+            // **OnTogglePasswordVisibilityClick**: Toggles password visibility when the user clicks to show/hide password.
             RegisterAction.OnTogglePasswordVisibilityClick -> {
                 state = state.copy(
-                    isPasswordVisible = !state.isPasswordVisible
+                    isPasswordVisible = !state.isPasswordVisible  // Toggles the password visibility state.
                 )
             }
+            // Default case for other actions that aren’t handled here.
             else -> Unit
         }
     }
 
+    // **register function**: Handles the registration process when the user clicks the register button.
     private fun register() {
         viewModelScope.launch {
+            // **state = state.copy(isRegistering = true)**: Sets the loading state to true to show the loading indicator.
             state = state.copy(isRegistering = true)
+
+            // **result**: Calls the repository's register function to attempt user registration, passing in email and password.
             val result = repository.register(
-                email = state.email.text.toString().trim(),
-                password = state.password.text.toString()
+                email = state.email.text.toString().trim(),  // Sends the user's email, trimming any excess spaces.
+                password = state.password.text.toString()  // Sends the user's password.
             )
+
+            // **state = state.copy(isRegistering = false)**: After the registration attempt, stop the loading indicator.
             state = state.copy(isRegistering = false)
 
-            when (result) {
+            // **When block**: Handles the result of the registration attempt (success or error).
+            when(result) {
+                // **Error case**: Handles any errors returned from the registration process.
                 is Result.Error -> {
-                    if (result.error == DataError.Network.CONFLICT) {
+                    // **If the error is a conflict (e.g., email already exists)**:
+                    if(result.error == DataError.Network.CONFLICT) {
                         eventChannel.send(RegisterEvent.Error(
-                            UiText.StringResource(R.string.error_user_already_exists)
+                            UiText.StringResource(R.string.error_email_exists)  // Sends an error event with a message.
                         ))
                     } else {
+                        // **For all other network errors**: Sends a general error event with the appropriate message.
                         eventChannel.send(RegisterEvent.Error(result.error.toUiText()))
                     }
                 }
+
+                // **Success case**: If the registration was successful, send a success event.
                 is Result.Success -> {
-                    eventChannel.send(RegisterEvent.RegistrationSuccess)
+                    eventChannel.send(RegisterEvent.RegistrationSuccess)  // Sends a success event.
                 }
             }
         }

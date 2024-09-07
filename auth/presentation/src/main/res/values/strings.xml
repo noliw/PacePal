@@ -18,5 +18,5 @@
     <string name="contains_uppercase_char">At least one upper case character</string>
     <string name="register">Register</string>
     <string name="enter_valid_email">Enter a valid email</string>
-    <string name="error_user_already_exists">A user with that email already exists.</string>
+    <string name="error_email_exists">A user with that email already exists.</string>
 </resources>
