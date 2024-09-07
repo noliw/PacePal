@@ -8,7 +8,7 @@ import io.ktor.client.HttpClient
 
 // **AuthRepositoryImpl Class**: Implements the AuthRepository interface, providing the actual network logic for user registration.
 class AuthRepositoryImpl(
-    private val httpClient: HttpClient  // The HttpClient used to make network requests.
+    private val httpClient: HttpClient  // instance The HttpClient used to make network requests.
 ) : AuthRepository {
 
     // **register Function**: Registers a user by making an HTTP POST request to the backend API.
