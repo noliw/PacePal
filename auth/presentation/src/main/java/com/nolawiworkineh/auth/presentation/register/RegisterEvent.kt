@@ -2,13 +2,16 @@ package com.nolawiworkineh.auth.presentation.register
 
 import com.nolawiworkineh.presentation.ui.UiText
 
-// **RegisterAction Interface**: Defines all possible user actions on the registration screen.
+// **sealed interface RegisterEvent**: Defines all possible events related to registration.
+// Sealed interfaces restrict the possible types of events to only those defined in this file.
 sealed interface RegisterEvent {
 
-    // **Toggle Password Visibility Action**: Represents the action of clicking to toggle the visibility of the password field.
+    // **RegistrationSuccess Event**: This event represents a successful registration.
+    // It doesn't carry any additional data, just signifies that registration was successful.
     data object RegistrationSuccess : RegisterEvent
 
-    // **Navigate to Login Action**: Represents the action of clicking to navigate back to the login screen.
+    // **Error Event**: This event represents a failed registration.
+    // It carries a message (wrapped in a UiText) that explains what went wrong during registration.
     data class Error(val error: UiText) : RegisterEvent
-
 }
+
