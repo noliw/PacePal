@@ -20,20 +20,26 @@ class HttpClientFactory {
 
     // **build Function**: Creates and configures an instance of HttpClient.
     fun build(): HttpClient {
-        return HttpClient(CIO) {  // CIO engine is used to make non-blocking HTTP requests.
+        // CIO engine is used to make non-blocking HTTP requests.
+        return HttpClient(CIO) {
 
             // **ContentNegotiation**: This is installed to handle JSON serialization and deserialization.
             install(ContentNegotiation) {
+                // this is the default JSON configuration
                 json(
+                    // here we can configure the JSON serializer
                     json = Json {
-                        ignoreUnknownKeys = true  // Allows the client to ignore unknown fields in JSON responses.
+                        // Allows the client to ignore unknown fields in JSON responses.
+                        ignoreUnknownKeys = true
                     }
                 )
             }
 
             // **Logging**: Logs all HTTP request and response information using Timber for debugging purposes.
             install(Logging) {
+                // A custom logger that uses Timber for logging.
                 logger = object : Logger {
+                    // function to log messages
                     override fun log(message: String) {
                         Timber.d(message)  // Logs the message using Timber's debug level.
                     }
