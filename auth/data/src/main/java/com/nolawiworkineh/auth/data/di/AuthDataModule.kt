@@ -1,9 +1,12 @@
 package com.nolawiworkineh.auth.data.di
 
+import com.nolawiworkineh.auth.data.AuthRepositoryImpl
 import com.nolawiworkineh.auth.data.EmailPatternValidator
+import com.nolawiworkineh.auth.domain.AuthRepository
 import com.nolawiworkineh.auth.domain.PatternValidator
 import com.nolawiworkineh.auth.domain.UserDataValidator
 import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 
@@ -22,4 +25,6 @@ val authDataModule = module {
     // **Provide a singleton instance of UserDataValidator**:
     // This validator checks the strength and format of passwords. Koin automatically creates the instance.
     singleOf(::UserDataValidator)
+
+    singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
 }
