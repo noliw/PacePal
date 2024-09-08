@@ -3,6 +3,7 @@
 
 package com.nolawiworkineh.auth.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -47,6 +50,7 @@ import com.nolawiworkineh.core.presentation.designsystem.components.GradientBack
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalActionButton
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalPasswordTextField
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalTextField
+import com.nolawiworkineh.presentation.ui.ObserveAsEvents
 import org.koin.androidx.compose.koinViewModel
 
 // **RegisterScreenRoot Composable**: The root composable for the registration screen in the Pacepal app.
@@ -59,6 +63,22 @@ fun RegisterScreenRoot(
     // **Success Callback**: A lambda function that handles actions after successful registration.
     onSuccessfulRegistration: () -> Unit
 ) {
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when(event) {
+            is RegisterEvent.Error -> {
+                keyboardController?.hide()
+                Toast.makeText(context, event.error.asString(context), Toast.LENGTH_LONG).show()
+            }
+            RegisterEvent.RegistrationSuccess -> {
+                keyboardController?.hide()
+                Toast.makeText(context, R.string.registration_successfull, Toast.LENGTH_LONG).show()
+                onSuccessfulRegistration()
+            }
+        }
+
+    }
     // **RegisterScreen Composable**: The main UI composable for the registration screen.
     RegisterScreen(
         // **State Propagation**: Passes the current state of the registration screen from the ViewModel.
