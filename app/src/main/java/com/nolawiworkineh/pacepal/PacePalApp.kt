@@ -28,7 +28,7 @@ class PacePalApp : Application() {
                 authDataModule, // Injects dependencies for the auth data layer
                 authViewModelModule, // Injects dependencies for the auth ViewModels
                 appModule, // Provides global dependencies for the app
-                coreDataModule
+                coreDataModule // Injects dependencies for the core data layer
             )
         }
     }
