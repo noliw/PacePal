@@ -63,30 +63,40 @@ fun RegisterScreenRoot(
     // **Success Callback**: A lambda function that handles actions after successful registration.
     onSuccessfulRegistration: () -> Unit
 ) {
+    // **Current Context**: Retrieves the current context to display Toast messages or interact with the system.
     val context = LocalContext.current
+    // **Keyboard Controller**: Manages the software keyboard, allowing the app to show or hide the keyboard.
     val keyboardController = LocalSoftwareKeyboardController.current
+    // **Observing Events from ViewModel**: Listens to events emitted by the ViewModel and responds (like showing errors or success).
     ObserveAsEvents(flow = viewModel.events) { event ->
-        when(event) {
+        when (event) {
+            // **Error Event**: Handles errors like invalid email, server issues, etc.
             is RegisterEvent.Error -> {
-                keyboardController?.hide()
+                keyboardController?.hide()  // **Hide Keyboard**: Hides the keyboard when an error occurs.
+                // **Show Error Message**: Displays the error as a Toast.
                 Toast.makeText(context, event.error.asString(context), Toast.LENGTH_LONG).show()
             }
+            // **Success Event**: Handles successful registration.
             RegisterEvent.RegistrationSuccess -> {
-                keyboardController?.hide()
+                keyboardController?.hide()  // **Hide Keyboard**: Hides the keyboard upon success.
+                // **Show Success Message**: Displays a success message.
                 Toast.makeText(context, R.string.registration_successfull, Toast.LENGTH_LONG).show()
+                // **Trigger Success Callback**: Calls the provided function after successful registration (e.g., navigate to another screen).
                 onSuccessfulRegistration()
             }
         }
-
     }
-    // **RegisterScreen Composable**: The main UI composable for the registration screen.
+
+    // **Register Screen**: Displays the registration form and handles the UI interaction.
     RegisterScreen(
-        // **State Propagation**: Passes the current state of the registration screen from the ViewModel.
+        // **State Propagation**: Passes the current state (email, password, validation, etc.) from the ViewModel.
         state = viewModel.state,
-        // **Action Handling**: Passes the ViewModel's action handler to the UI.
+
+        // **Action Handling**: Passes the ViewModel’s action handler (handles user actions like clicking buttons).
         onAction = viewModel::onAction
     )
 }
+
 
 
 // **RegisterScreen Composable**: The primary UI component for the registration screen.
