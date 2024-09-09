@@ -97,8 +97,6 @@ fun RegisterScreenRoot(
     )
 }
 
-
-
 // **RegisterScreen Composable**: The primary UI component for the registration screen.
 @Composable
 private fun RegisterScreen(

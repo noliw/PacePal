@@ -6,5 +6,5 @@ interface SessionStorage {
     suspend fun get(): AuthInfo?
 
     // **set**: Stores the provided AuthInfo (access token, refresh token, user ID).
-    suspend fun set(info: AuthInfo)
+    suspend fun set(info: AuthInfo?)
 }
