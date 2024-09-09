@@ -79,6 +79,7 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
                     // **navigate("login")**: After successfully registering, this takes the user to the login screen.
                     navController.navigate("login")
                 }
+
             )
         }
         composable(route = "login") {

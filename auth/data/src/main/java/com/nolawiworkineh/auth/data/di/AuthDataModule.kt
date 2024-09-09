@@ -26,5 +26,10 @@ val authDataModule = module {
     // This validator checks the strength and format of passwords. Koin automatically creates the instance.
     singleOf(::UserDataValidator)
 
+    /*
+    - AuthRepositoryImpl is the implementation of the AuthRepository interface.
+    - singleOf creates a singleton of AuthRepositoryImpl (meaning only one instance of it will exist throughout the app).
+    - .bind<AuthRepository>() tells Koin that whenever the app asks for an AuthRepository, it should provide the AuthRepositoryImpl instance.
+     */
     singleOf(::AuthRepositoryImpl).bind<AuthRepository>()
 }
