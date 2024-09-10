@@ -12,7 +12,7 @@ val appModule = module {
     single<SharedPreferences> {
         EncryptedSharedPreferences.create(
             androidApplication(),  // Context (required to create SharedPreferences)
-            "auth_pref",  // Name of the SharedPreferences file
+            "auth_preferences",  // Name of the SharedPreferences file
             MasterKey.Builder(androidApplication())  // MasterKey for encryption
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)  // Encryption scheme
                 .build(),
