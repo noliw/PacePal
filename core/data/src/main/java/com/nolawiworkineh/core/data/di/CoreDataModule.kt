@@ -1,6 +1,5 @@
 package com.nolawiworkineh.core.data.di
 
-import android.content.SharedPreferences
 import com.nolawiworkineh.core.data.networking.HttpClientFactory
 import org.koin.dsl.module
 
@@ -10,9 +9,5 @@ var coreDataModule = module {
     // Provides a single instance of the HTTP client by using the HttpClientFactory to build it
     single {
         HttpClientFactory().build()
-    }
-
-    single<SharedPreferences> {
-
     }
 }
