@@ -67,36 +67,44 @@ class HttpClientFactory(
             install(Auth) {
                 bearer {
                     loadTokens {
-                        val info = sessionStorage.get()
+                        val info =
+                            sessionStorage.get()  // Retrieves the current session info (tokens) from session storage
                         BearerTokens(
-                            accessToken = info?.accessToken ?: "",
-                            refreshToken = info?.refreshToken ?: ""
+                            accessToken = info?.accessToken
+                                ?: "",  // Access token to attach to requests
+                            refreshToken = info?.refreshToken
+                                ?: ""  // Refresh token for token refresh
                         )
                     }
                     refreshTokens {
-                        val info = sessionStorage.get()
+                        // When the access token expires, this block refreshes the tokens
+                        val info =
+                            sessionStorage.get()  // Retrieve session info (refresh token) from session storage
                         val response = client.post<AccessTokenRequest, AccessTokenResponse>(
-                            route = "/accessToken",
-                            body =AccessTokenRequest(
-                                refreshToken = info?.refreshToken ?: "",
-                                userId = info?.userId ?: ""
+                            route = "/accessToken",  // API endpoint for token refresh
+                            body = AccessTokenRequest(
+                                refreshToken = info?.refreshToken
+                                    ?: "",  // Refresh token is sent in the body
+                                userId = info?.userId
+                                    ?: ""  // User ID is sent to validate the refresh request
                             )
                         )
-                        if (response is Result.Success ) {
+                        // Handle the token refresh response
+                        if (response is Result.Success) {
                             val newAuthInfo = AuthInfo(
-                                accessToken = response.data.accessToken,
-                                refreshToken = info?.refreshToken ?: "",
-                                userId = info?.userId ?: ""
+                                accessToken = response.data.accessToken,  // New access token from server
+                                refreshToken = info?.refreshToken
+                                    ?: "",  // Keep using the same refresh token
+                                userId = info?.userId ?: ""  // User ID stays the same
                             )
-                            sessionStorage.set(newAuthInfo)
-
+                            sessionStorage.set(newAuthInfo)  // Store the new access token in session storage
                             BearerTokens(
-                                accessToken = newAuthInfo.accessToken,
-                                refreshToken = newAuthInfo.refreshToken
+                                accessToken = newAuthInfo.accessToken,  // Return new access token
+                                refreshToken = newAuthInfo.refreshToken  // Return the same refresh token
                             )
                         } else {
                             BearerTokens(
-                                accessToken = "",
+                                accessToken = "",  // Clear tokens if refresh fails
                                 refreshToken = ""
                             )
                         }
@@ -105,5 +113,7 @@ class HttpClientFactory(
             }
 
         }
+
     }
 }
+
