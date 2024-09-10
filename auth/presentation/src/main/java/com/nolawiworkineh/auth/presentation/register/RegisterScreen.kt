@@ -41,7 +41,6 @@ import com.nolawiworkineh.core.presentation.designsystem.CrossIcon
 import com.nolawiworkineh.core.presentation.designsystem.EmailIcon
 import com.nolawiworkineh.core.presentation.designsystem.PacePalBlue
 import com.nolawiworkineh.core.presentation.designsystem.PacePalDarkRed
-import com.nolawiworkineh.core.presentation.designsystem.PacePalGray
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.PacePalWhite
 import com.nolawiworkineh.core.presentation.designsystem.Poppins
@@ -93,7 +92,14 @@ fun RegisterScreenRoot(
         state = viewModel.state,
 
         // **Action Handling**: Passes the ViewModel’s action handler (handles user actions like clicking buttons).
-        onAction = viewModel::onAction
+        onAction = {action ->
+                when(action) {
+                    is RegisterAction.OnLoginClick -> onSignInClick()
+                    else -> Unit
+                }
+                viewModel.onAction(action)
+
+        }
     )
 }
 
@@ -122,42 +128,36 @@ private fun RegisterScreen(
             )
             // **Annotated String**: Builds a styled string with clickable text.
             val annotatedString = buildAnnotatedString {
-                // **Span Style**: Applies a style to the "Already have an account?" text.
                 withStyle(
                     style = SpanStyle(
-                        fontFamily = Poppins, // **Font Family**: Uses the Poppins font for the text.
-                        color = PacePalGray // **Text Color**: Sets the color of the text to gray.
+                        fontFamily = Poppins,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
-                    append(stringResource(id = R.string.already_have_an_account) + " ") // **Append Text**: Adds the "Already have an account?" text.
-                    // **Clickable Text Annotation**: Marks the "Login" text as clickable.
+                    append(stringResource(id = R.string.already_have_an_account) + " ")
                     pushStringAnnotation(
-                        tag = "clickable_text", // **Tag**: Identifies the clickable text annotation.
-                        annotation = stringResource(id = R.string.login) // **Annotation**: Associates the "Login" text with the clickable action.
+                        tag = "clickable_text",
+                        annotation = stringResource(id = R.string.login)
                     )
-                    // **Span Style**: Applies a bold style to the "Login" text.
                     withStyle(
                         style = SpanStyle(
-                            fontFamily = Poppins, // **Font Family**: Uses the Poppins font for the clickable text.
-                            fontWeight = FontWeight.Bold, // **Font Weight**: Makes the "Login" text bold.
-                            color = MaterialTheme.colorScheme.primary, // **Text Color**: Sets the color of the text to the primary color.
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontFamily = Poppins
                         )
                     ) {
-                        append(stringResource(id = R.string.login)) // **Append Text**: Adds the "Login" text.
+                        append(stringResource(id = R.string.login))
                     }
                 }
             }
-            // **ClickableText Composable**: Displays the annotated string as clickable text.
             ClickableText(
-                text = annotatedString, // **Text**: Passes the annotated string to the ClickableText composable.
-                onClick = {
-                    // **Handle Click**: Handles the click on the "Login" text.
+                text = annotatedString,
+                onClick = { offset ->
                     annotatedString.getStringAnnotations(
-                        tag = "clickable_text", // **Tag**: Looks for the "clickable_text" annotation.
-                        start = it, // **Start Position**: The start of the clicked area.
-                        end = it // **End Position**: The end of the clicked area.
+                        tag = "clickable_text",
+                        start = offset,
+                        end = offset
                     ).firstOrNull()?.let {
-                        // **Trigger Action**: Triggers the OnLoginClick action when the "Login" text is clicked.
                         onAction(RegisterAction.OnLoginClick)
                     }
                 }
@@ -304,3 +304,4 @@ private fun RegisterScreenRootScreenPreview() {
         )
     }
 }
+

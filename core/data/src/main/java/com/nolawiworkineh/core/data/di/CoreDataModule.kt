@@ -12,7 +12,7 @@ import org.koin.dsl.module
 var coreDataModule = module {
     // Provides a single instance of the HTTP client by using the HttpClientFactory to build it
     single {
-        HttpClientFactory().build()
+        HttpClientFactory(get()).build()
     }
 
     // Provides a single instance of the SessionStorage by using the EncryptedSessionStorage
