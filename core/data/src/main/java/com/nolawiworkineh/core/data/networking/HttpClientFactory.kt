@@ -1,8 +1,12 @@
 package com.nolawiworkineh.core.data.networking
 
 import com.nolawiworkineh.core.data.BuildConfig
+import com.nolawiworkineh.core.domain.SessionStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -16,7 +20,9 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 // **HttpClientFactory Class**: A factory class responsible for creating an instance of HttpClient.
-class HttpClientFactory {
+class HttpClientFactory(
+    private val sessionStorage: SessionStorage
+) {
 
     // **build Function**: Creates and configures an instance of HttpClient.
     fun build(): HttpClient {
@@ -50,8 +56,28 @@ class HttpClientFactory {
             // **defaultRequest Block**: Adds default settings to every request made with this client.
             defaultRequest {
                 contentType(ContentType.Application.Json)  // Ensures all requests expect JSON.
-                header("x-api-key", BuildConfig.API_KEY)  // Adds the API key from BuildConfig to every request.
+                header(
+                    "x-api-key",
+                    BuildConfig.API_KEY
+                )  // Adds the API key from BuildConfig to every request.
             }
+
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        val info = sessionStorage.get()
+                        BearerTokens(
+                            accessToken = info?.accessToken ?: "",
+                            refreshToken = info?.refreshToken ?: ""
+                        )
+                    }
+                    refreshTokens {
+                        val info = sessionStorage.get()
+                        val response = client.post<AccessTokenRequest,AccessTokenResponse>()
+                    }
+                }
+            }
+
         }
     }
 }
