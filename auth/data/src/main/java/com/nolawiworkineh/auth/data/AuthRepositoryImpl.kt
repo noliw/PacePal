@@ -22,4 +22,11 @@ class AuthRepositoryImpl(
             body = RegisterRequest(email = email, password = password)  // The request body containing the email and password
         )
     }
+
+    override suspend fun login(
+        email: String,
+        password: String
+    ): EmptyDataResult<DataError.Network> {
+
+    }
 }

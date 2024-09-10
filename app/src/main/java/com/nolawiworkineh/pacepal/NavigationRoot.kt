@@ -76,25 +76,31 @@ private fun NavGraphBuilder.authGraph(navController: NavHostController) {
             )
         }
         composable(route = "login") {
+            // **LoginScreenRoot**: Displays the login screen and handles login success and sign-up navigation.
             LoginScreenRoot(
                 onLoginSuccess = {
+                    // **Navigate to Run Screen on Success**: On successful login, navigate to the "run" screen.
                     navController.navigate("run") {
+                        // **popUpTo("auth")**: Removes the "auth" navigation graph from the back stack, preventing back navigation to the login screen.
                         popUpTo("auth") {
-                            inclusive = true
+                            inclusive = true  // **inclusive**: Ensures that "auth" itself is removed from the back stack.
                         }
                     }
                 },
                 onSignUpClick = {
+                    // **Navigate to Register Screen on Sign-Up Click**: On click of the "Sign Up" link, navigate to the "register" screen.
                     navController.navigate("register") {
+                        // **popUpTo("login")**: Removes the "login" screen from the back stack.
                         popUpTo("login") {
-                            inclusive = true
-                            saveState = true
+                            inclusive = true  // **inclusive**: Removes the "login" screen itself from the back stack.
+                            saveState = true  // **saveState**: Saves the state of the screen so it can be restored if the user navigates back to "login".
                         }
-                        restoreState = true
+                        restoreState = true  // **restoreState**: Restores the saved state when the user navigates back to "login".
                     }
                 }
             )
         }
+
     }
 }
 
