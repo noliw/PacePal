@@ -1,7 +1,9 @@
 package com.nolawiworkineh.core.data.networking
 
 import com.nolawiworkineh.core.data.BuildConfig
+import com.nolawiworkineh.core.domain.AuthInfo
 import com.nolawiworkineh.core.domain.SessionStorage
+import com.nolawiworkineh.core.domain.util.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.auth.Auth
@@ -73,7 +75,31 @@ class HttpClientFactory(
                     }
                     refreshTokens {
                         val info = sessionStorage.get()
-                        val response = client.post<AccessTokenRequest,AccessTokenResponse>()
+                        val response = client.post<AccessTokenRequest, AccessTokenResponse>(
+                            route = "/accessToken",
+                            body =AccessTokenRequest(
+                                refreshToken = info?.refreshToken ?: "",
+                                userId = info?.userId ?: ""
+                            )
+                        )
+                        if (response is Result.Success ) {
+                            val newAuthInfo = AuthInfo(
+                                accessToken = response.data.accessToken,
+                                refreshToken = info?.refreshToken ?: "",
+                                userId = info?.userId ?: ""
+                            )
+                            sessionStorage.set(newAuthInfo)
+
+                            BearerTokens(
+                                accessToken = newAuthInfo.accessToken,
+                                refreshToken = newAuthInfo.refreshToken
+                            )
+                        } else {
+                            BearerTokens(
+                                accessToken = "",
+                                refreshToken = ""
+                            )
+                        }
                     }
                 }
             }
