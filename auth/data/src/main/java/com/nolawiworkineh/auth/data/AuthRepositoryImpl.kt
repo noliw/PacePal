@@ -15,7 +15,7 @@ class AuthRepositoryImpl(
 // instance The HttpClient used to make network requests.
     private val httpClient: HttpClient,
     // / **SessionStorage**: Stores and retrieves authentication info (e.g., tokens, user ID).
-    private val SessionStorage: SessionStorage
+    private val sessionStorage: SessionStorage
 ) : AuthRepository {
 
     // **register Function**: Registers a user by making an HTTP POST request to the backend API.
@@ -33,26 +33,34 @@ class AuthRepositoryImpl(
         )
     }
 
+    // **login function**: Handles the login process by sending a network request and storing authentication data.
     override suspend fun login(
         email: String,
         password: String
     ): EmptyDataResult<DataError.Network> {
+
+        // **Send Login Request**: Sends the email and password to the server using an HTTP POST request.
         val result = httpClient.post<LoginRequest, LoginResponse>(
-            route = "/login",
-            body = LoginRequest(
-                email = email,
-                password = password
+            route = "/login",  // **API Endpoint**: The server route to send the login request to.
+            body = LoginRequest(  // **Request Body**: The data (email and password) sent in the login request.
+                email = email,  // **Email**: The user’s email.
+                password = password  // **Password**: The user’s password.
             )
         )
+
+        // **Check if Request Was Successful**: If the server responds with success, store the authentication info.
         if (result is Result.Success) {
-            SessionStorage.set(
+            // **Store Auth Info**: Save the access token, refresh token, and user ID in session storage.
+            sessionStorage.set(
                 AuthInfo(
-                    accessToken = result.data.accessToken,
-                    refreshToken = result.data.refreshToken,
-                    userId = result.data.userId
+                    accessToken = result.data.accessToken,  // **Access Token**: The token used to authenticate API requests.
+                    refreshToken = result.data.refreshToken,  // **Refresh Token**: Used to refresh the access token when it expires.
+                    userId = result.data.userId  // **User ID**: The unique identifier for the authenticated user.
                 )
             )
         }
+
+        // **Return the Result**: Convert the result into an empty data result, whether success or error.
         return result.asEmptyDataResult()
     }
 }
