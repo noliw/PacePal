@@ -40,7 +40,7 @@ class AuthRepositoryImpl(
     ): EmptyDataResult<DataError.Network> {
 
         // **Send Login Request**: Sends the email and password to the server using an HTTP POST request.
-        val result = httpClient.post<LoginRequest, LoginResponse>(
+        val serverResponse = httpClient.post<LoginRequest, LoginResponse>(
             route = "/login",  // **API Endpoint**: The server route to send the login request to.
             body = LoginRequest(  // **Request Body**: The data (email and password) sent in the login request.
                 email = email,  // **Email**: The user’s email.
@@ -49,18 +49,18 @@ class AuthRepositoryImpl(
         )
 
         // **Check if Request Was Successful**: If the server responds with success, store the authentication info.
-        if (result is Result.Success) {
+        if (serverResponse is Result.Success) {
             // **Store Auth Info**: Save the access token, refresh token, and user ID in session storage.
             sessionStorage.set(
                 AuthInfo(
-                    accessToken = result.data.accessToken,  // **Access Token**: The token used to authenticate API requests.
-                    refreshToken = result.data.refreshToken,  // **Refresh Token**: Used to refresh the access token when it expires.
-                    userId = result.data.userId  // **User ID**: The unique identifier for the authenticated user.
+                    accessToken = serverResponse.data.accessToken,  // **Access Token**: The token used to authenticate API requests.
+                    refreshToken = serverResponse.data.refreshToken,  // **Refresh Token**: Used to refresh the access token when it expires.
+                    userId = serverResponse.data.userId  // **User ID**: The unique identifier for the authenticated user.
                 )
             )
         }
 
         // **Return the Result**: Convert the result into an empty data result, whether success or error.
-        return result.asEmptyDataResult()
+        return serverResponse.asEmptyDataResult()
     }
 }
