@@ -31,23 +31,37 @@ class LoginViewModel(
     private val userDataValidator: UserDataValidator
 ): ViewModel() {
 
+    // 1. STATE MANAGEMENT
     // Holds the current state of the login screen (email, password, validation, loading state).
     var state by mutableStateOf(LoginState())
         private set  // Ensures the state can only be modified within the ViewModel.
 
+    // 2. EVENT HANDLING
     // **eventChannel**: A channel that sends one-time events like success or errors back to the UI.
     private val eventChannel = Channel<LoginEvent>()
-    // **events**: This exposes the eventChannel as a Flow, which the UI listens to for events like success or error.
+    // **events**: This exposes the eventChannel as a Flow,
+    // which the UI listens to for events like success or error.
     val events = eventChannel.receiveAsFlow()
 
+    // 3. INITIALIZATION
+    // **init Block**: Executes when the ViewModel is first created.
     init {
-        combine(state.email.textAsFlow(), state.password.textAsFlow()) { email, password ->
+        // Combine two flows: one for the email input and one for the password input.
+        combine(
+            // Convert the email text field to a flow that emits values every time the email changes.
+            state.email.textAsFlow(),
+
+            // Convert the password text field to a flow that emits values every time the password changes.
+            state.password.textAsFlow()
+        ) { email, password ->
+            // Every time either the email or password changes, update the state with new conditions.
             state = state.copy(
+                // Check if the email is valid AND the password is not empty.
                 canLogin = userDataValidator.isValidEmail(
-                    email = email.toString().trim()
-                ) && password.isNotEmpty()
+                    email = email.toString().trim()  // Validate the trimmed email string.
+                ) && password.isNotEmpty()  // Ensure the password is not empty.
             )
-        }.launchIn(viewModelScope)
+        }.launchIn(viewModelScope)  // Launch the flow in the ViewModel’s coroutine scope.
     }
 
     // Processes the user actions or events triggered on the login screen.
@@ -96,3 +110,6 @@ class LoginViewModel(
         }
     }
 }
+
+
+
