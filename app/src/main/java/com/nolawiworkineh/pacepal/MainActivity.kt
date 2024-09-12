@@ -4,7 +4,6 @@ package com.nolawiworkineh.pacepal
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,14 +16,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModel<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        installSplashScreen().setKeepOnScreenCondition {
+                viewModel.state.isCheckingAuth
+            }
         setContent {
             PacePalTheme {
                 // **Create the navigation controller**: This controller will manage navigation between different screens.
