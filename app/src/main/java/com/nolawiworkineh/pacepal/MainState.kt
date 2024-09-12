@@ -1,6 +1,6 @@
 package com.nolawiworkineh.pacepal
 
 data class MainState(
-    val isLoginInProgress: Boolean = false,
+    val isLoggedIn: Boolean = false,
     val isCheckingAuth: Boolean = false,
 )
