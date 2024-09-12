@@ -26,13 +26,15 @@ import com.nolawiworkineh.auth.presentation.register.RegisterScreenRoot
 fun NavigationRoot(
     // **NavHostController**: Think of this as the "manager" that controls where the app should go next when a user interacts with it.
     navController: NavHostController,
+    // **isLoggedIn**: A flag that indicates whether the user is logged in or not.
+    isLoggedIn: Boolean
 ) {
     NavHost(
         // **navController**: This is the "manager" that will actually handle the navigation between screens.
         navController = navController,
         // **startDestination**: This tells the app which screen to show first when it opens.
         // Here, it starts with the "auth" section, which deals with things like login and registration.
-        startDestination = "authFeature"
+        startDestination = if (isLoggedIn) "runFeature" else "authFeature"
     ) {
         // **authGraph**: This calls another function that sets up all the screens related to authentication,
         // like intro, login, and registration.
