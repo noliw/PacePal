@@ -8,29 +8,28 @@ import androidx.lifecycle.viewModelScope
 import com.nolawiworkineh.core.domain.SessionStorage
 import kotlinx.coroutines.launch
 
-// thia class will have the logic to check if we are already authenticated
-class MainViewModel(
-    // This is where we store and retrieve the login info (like the user’s token).
+// this class will have the logic to check if we are already authenticated
+class MainViewModel (
+    // **SessionStorage Dependency**: Provides access to session storage, where the authentication token is stored.
     private val sessionStorage: SessionStorage
 ) : ViewModel() {
 
-    // This keeps track of whether the user is logged in and whether we’re checking that info.
+    // **State Management**: Holds the state of the app (whether the user is logged in, checking authentication, etc.).
     var state by mutableStateOf(MainState())
-        private set  // Only this ViewModel can change the state.
+        private set  // **Private Setter**: Ensures the state can only be modified within the ViewModel.
 
-    //
     init {
-        // We're starting a background task to check if the user is already logged in.
+        // **Coroutine Scope**: Executes the authentication check asynchronously.
         viewModelScope.launch {
-            // While we're checking, we set the state to show that the check is in progress.
+            // **Set Checking State**: Update the state to indicate that the app is checking authentication.
             state = state.copy(isCheckingAuth = true)
 
-            // Here we check if we have the user's login info stored. If we do, they're logged in.
+            // **Check Authentication**: Check if there's an existing session (user is logged in).
             state = state.copy(
-                isLoggedIn = sessionStorage.get() != null
+                isLoggedIn = sessionStorage.get() != null,  // If a session exists, the user is logged in.
             )
 
-            // Now that we’re done checking, we tell the app we're finished.
+            // **Finished Checking**: Set the state to indicate that the authentication check is complete.
             state = state.copy(isCheckingAuth = false)
         }
     }
