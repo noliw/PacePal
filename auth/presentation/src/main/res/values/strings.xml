@@ -24,4 +24,5 @@
     <string name="welcome_text">Welcome to your ultimate running companion!!! Track, analyze and conquer your runs.</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
     <string name="your_logged_in">You\'ve successfully loggged in!</string>
+    <string name="error_email_password_incorrect">ERROR!! The Email or Passowrd is incorrect!</string>
 </resources>
