@@ -1,6 +1,8 @@
 package com.nolawiworkineh.run.presentation.run_overview
 
-class RunOverviewViewModel() {
+import androidx.lifecycle.ViewModel
+
+class RunOverviewViewModel: ViewModel() {
 
     fun onAction(action: RunOverviewAction) {
 
