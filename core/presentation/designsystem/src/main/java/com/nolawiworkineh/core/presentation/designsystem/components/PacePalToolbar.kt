@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.nolawiworkineh.core.presentation.designsystem
+package com.nolawiworkineh.core.presentation.designsystem.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +33,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nolawiworkineh.core.presentation.designsystem.AnalyticsIcon
+import com.nolawiworkineh.core.presentation.designsystem.ArrowLeftIcon
+import com.nolawiworkineh.core.presentation.designsystem.LogoIcon
+import com.nolawiworkineh.core.presentation.designsystem.PacePalBlue
+import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
+import com.nolawiworkineh.core.presentation.designsystem.Poppins
+import com.nolawiworkineh.core.presentation.designsystem.R
 import com.nolawiworkineh.core.presentation.designsystem.components.util.DropdownMenuItem
 
 @Composable
