@@ -44,88 +44,127 @@ import com.nolawiworkineh.core.presentation.designsystem.components.util.Dropdow
 
 @Composable
 fun PacePalToolbar(
+    // **modifier**: Allows the caller to pass layout or styling modifiers to customize the toolbar's appearance.
     modifier: Modifier = Modifier,
+
+    // **showBackButton**: A flag to determine whether the toolbar should show a back button for navigation.
     showBackButton: Boolean = false,
+
+    // **title**: The text that will be displayed in the center of the toolbar as the title.
     title: String = "",
+
+    // **menuItems**: A list of items to be shown in the toolbar’s dropdown menu, such as settings or logout options.
     menuItems: List<DropdownMenuItem> = emptyList(),
+
+    // **onMenuItemClick**: Callback function to handle what happens when a user clicks a menu item. Each item in the dropdown is identified by its index.
     onMenuItemClick: (Int) -> Unit = {},
+
+    // **onBackClick**: Callback function to handle the back button click. Typically used for navigation (e.g., returning to a previous screen).
     onBackClick: () -> Unit = {},
+
+    // **scrollBehavior**: Defines how the toolbar reacts to scrolling, such as hiding or sticking to the top.
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
+
+    // **startContent**: Optional composable content that can be placed at the start of the toolbar (e.g., an icon or logo).
     startContent: (@Composable () -> Unit)? = null,
 ) {
+    // **isDropDownOpen**: A flag to track whether the dropdown menu is currently open.
     var isDropDownOpen by rememberSaveable { mutableStateOf(false) }
+
+    // **TopAppBar**: The main toolbar component provided by the Material library.
     TopAppBar(
         title = {
+            // **Row**: Aligns the title and optional start content (such as an icon or logo) horizontally.
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically // Aligns the content vertically to the center.
             ) {
+                // **startContent?.invoke()**: If startContent is provided, it is displayed here, typically an icon or logo.
                 startContent?.invoke()
+
+                // **Spacer**: Adds a small space (8dp) between the start content and the title.
                 Spacer(modifier = Modifier.width(8.dp))
+
+                // **Text**: Displays the title in a specific style, including font, weight, and color.
                 Text(
-                    text = title,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontFamily = Poppins
+                    text = title,  // Uses the title provided as a parameter.
+                    fontWeight = FontWeight.SemiBold,  // Makes the title text semi-bold.
+                    color = MaterialTheme.colorScheme.onBackground,  // Uses the onBackground color from the current theme.
+                    fontFamily = Poppins  // Uses the Poppins font for the title.
                 )
             }
         },
+        // **modifier**: Applies any additional layout or styling passed to the toolbar.
         modifier = modifier,
+
+        // **scrollBehavior**: Defines how the toolbar behaves when the screen is scrolled (e.g., hide or remain visible).
         scrollBehavior = scrollBehavior,
+
+        // **colors**: Sets the color of the toolbar. We set it to transparent to keep it customizable.
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Transparent  // Makes the toolbar background transparent.
         ),
+
+        // **navigationIcon**: If the back button is enabled, it shows the back button on the left side of the toolbar.
         navigationIcon = {
-            if(showBackButton) {
+            if (showBackButton) {
+                // **IconButton**: Creates a clickable button for the back icon.
                 IconButton(onClick = onBackClick) {
+                    // **Icon**: Displays the back icon (ArrowLeftIcon) with a label for accessibility.
                     Icon(
-                        imageVector = ArrowLeftIcon,
-                        contentDescription = stringResource(id = R.string.go_back),
-                        tint = MaterialTheme.colorScheme.onBackground
+                        imageVector = ArrowLeftIcon,  // Arrow left icon for navigation.
+                        contentDescription = stringResource(id = R.string.go_back),  // Describes the icon for accessibility.
+                        tint = MaterialTheme.colorScheme.onBackground  // The color of the icon, matching the theme.
                     )
                 }
             }
         },
+
+        // **actions**: Displays actions like a dropdown menu on the right side of the toolbar.
         actions = {
-            if(menuItems.isNotEmpty()) {
+            if (menuItems.isNotEmpty()) {  // Only show the dropdown if there are menu items.
+                // **Box**: Contains the dropdown and the menu button.
                 Box {
+                    // **DropdownMenu**: The actual dropdown that shows menu items when expanded.
                     DropdownMenu(
-                        expanded = isDropDownOpen,
-                        onDismissRequest = {
-                            isDropDownOpen = false
-                        }
+                        expanded = isDropDownOpen,  // Determines if the dropdown is visible.
+                        onDismissRequest = { isDropDownOpen = false }  // Closes the dropdown when clicked outside.
                     ) {
+                        // Loops through the menu items and creates a clickable row for each.
                         menuItems.forEachIndexed { index, item ->
                             Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                                verticalAlignment = Alignment.CenterVertically,  // Aligns the icon and text in each row.
                                 modifier = Modifier
-                                    .clickable { onMenuItemClick(index) }
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
+                                    .clickable { onMenuItemClick(index) }  // Handles clicks on each menu item.
+                                    .fillMaxWidth()  // Makes the menu item take up the full width of the dropdown.
+                                    .padding(16.dp)  // Adds padding around each menu item.
                             ) {
+                                // **Icon**: Displays the icon for each menu item.
                                 Icon(
-                                    imageVector = item.icon,
-                                    contentDescription = item.title
+                                    imageVector = item.icon,  // Uses the icon from the menu item.
+                                    contentDescription = item.title  // Describes the icon for accessibility.
                                 )
+                                // **Spacer**: Adds space between the icon and text.
                                 Spacer(modifier = Modifier.width(8.dp))
+                                // **Text**: Displays the title of the menu item.
                                 Text(text = item.title)
                             }
                         }
                     }
-                    IconButton(onClick = {
-                        isDropDownOpen = true
-                    }) {
+                    // **IconButton**: The button that opens the dropdown menu.
+                    IconButton(onClick = { isDropDownOpen = true }) {
+                        // **Icon**: Displays the three-dot menu icon.
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(id = R.string.open_menu),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            imageVector = Icons.Default.MoreVert,  // The vertical three-dot icon for the menu.
+                            contentDescription = stringResource(id = R.string.open_menu),  // Describes the menu button for accessibility.
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant  // The color of the icon, matching the theme.
                         )
                     }
                 }
             }
         }
     )
-
 }
+
 
 @Preview()
 @Composable
