@@ -1,7 +1,7 @@
 package com.nolawiworkineh.core.data.networking
 
 import com.nolawiworkineh.core.data.BuildConfig
-import com.nolawiworkineh.core.domain.AuthInfo
+import com.nolawiworkineh.core.domain.AuthInfo.AuthInfo
 import com.nolawiworkineh.core.domain.SessionStorage
 import com.nolawiworkineh.core.domain.util.Result
 import io.ktor.client.HttpClient

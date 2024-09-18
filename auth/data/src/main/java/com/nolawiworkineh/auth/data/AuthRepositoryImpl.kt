@@ -2,7 +2,7 @@ package com.nolawiworkineh.auth.data
 
 import com.nolawiworkineh.auth.domain.AuthRepository
 import com.nolawiworkineh.core.data.networking.post
-import com.nolawiworkineh.core.domain.AuthInfo
+import com.nolawiworkineh.core.domain.AuthInfo.AuthInfo
 import com.nolawiworkineh.core.domain.SessionStorage
 import com.nolawiworkineh.core.domain.util.DataError
 import com.nolawiworkineh.core.domain.util.EmptyDataResult

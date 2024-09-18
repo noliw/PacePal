@@ -1,7 +1,7 @@
 package com.nolawiworkineh.core.data.auth
 
 import android.content.SharedPreferences
-import com.nolawiworkineh.core.domain.AuthInfo
+import com.nolawiworkineh.core.domain.AuthInfo.AuthInfo
 import com.nolawiworkineh.core.domain.SessionStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

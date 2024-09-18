@@ -1,5 +1,7 @@
 package com.nolawiworkineh.core.domain
 
+import com.nolawiworkineh.core.domain.AuthInfo.AuthInfo
+
 // **SessionStorage**: An interface that defines methods for getting and setting authentication info (AuthInfo).
 interface SessionStorage {
     // **get**: Retrieves the current AuthInfo (tokens and user ID) if it exists. Returns null if no session is active.

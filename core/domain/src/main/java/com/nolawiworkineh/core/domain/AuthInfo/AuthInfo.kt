@@ -1,4 +1,4 @@
-package com.nolawiworkineh.core.domain
+package com.nolawiworkineh.core.domain.AuthInfo
 
 // **AuthInfo**: A data class that holds the user's authentication tokens and their user ID.
 data class AuthInfo(
