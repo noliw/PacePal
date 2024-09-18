@@ -56,7 +56,8 @@ fun PacePalToolbar(
     // **menuItems**: A list of items to be shown in the toolbar’s dropdown menu, such as settings or logout options.
     menuItems: List<DropdownMenuItem> = emptyList(),
 
-    // **onMenuItemClick**: Callback function to handle what happens when a user clicks a menu item. Each item in the dropdown is identified by its index.
+    // **onMenuItemClick**: Callback function to handle what happens when a user clicks a menu item.
+    // Each item in the dropdown is identified by its index.
     onMenuItemClick: (Int) -> Unit = {},
 
     // **onBackClick**: Callback function to handle the back button click. Typically used for navigation (e.g., returning to a previous screen).
