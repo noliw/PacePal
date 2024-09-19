@@ -5,6 +5,7 @@ import com.nolawiworkineh.auth.data.di.authDataModule
 import com.nolawiworkineh.auth.presentation.di.authViewModelModule
 import com.nolawiworkineh.core.data.di.coreDataModule
 import com.nolawiworkineh.pacepal.di.appModule
+import com.nolawiworkineh.run.presentation.di.runViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -28,7 +29,8 @@ class PacePalApp : Application() {
                 authDataModule, // Injects dependencies for the auth data layer
                 authViewModelModule, // Injects dependencies for the auth ViewModels
                 appModule, // Provides global dependencies for the app
-                coreDataModule // Injects dependencies for the core data layer
+                coreDataModule, // Injects dependencies for the core data layer
+                runViewModelModule
             )
         }
     }
