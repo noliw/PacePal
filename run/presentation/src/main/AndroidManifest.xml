@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Permission to access the approximate location of the device -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Permission to access the precise GPS location of the device -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Permission to post notifications, required for Android 13 and above -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+
 </manifest>
