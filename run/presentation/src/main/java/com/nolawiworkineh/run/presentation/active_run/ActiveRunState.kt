@@ -8,7 +8,7 @@ import kotlin.time.Duration
 data class ActiveRunState(
     val elapsedTime: Duration = Duration.ZERO,  // The total time elapsed since the run started.
     val runData: RunData = RunData(),  // The data of the current run, such as distance, pace, and location history.
-    val shouldTrack: Boolean = false,  // Whether the app should actively track the user's movement.
+    val isTracking: Boolean = false,  // Whether the app should actively track the user's movement.
     val hasStartedRunning: Boolean = false,  // Indicates if the user has started running.
     val currentLocation: Location? = null,  // The user's current location (latitude, longitude).
     val isRunFinished: Boolean = false,  // Indicates if the user has finished their run.
