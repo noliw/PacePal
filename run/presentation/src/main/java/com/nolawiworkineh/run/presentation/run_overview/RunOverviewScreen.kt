@@ -29,10 +29,18 @@ import org.koin.androidx.compose.koinViewModel
 fun RunOverviewRoot(
     // **ViewModel Injection**: Retrieves the RunOverviewViewModel using Koin dependency injection.
     viewModel: RunOverviewViewModel = koinViewModel(),
+    onStartRunClick: () -> Unit
 ) {
     // **RunOverviewScreen**: The main composable function for the screen, passing user actions to the ViewModel.
     RunOverviewScreen(
-        onAction = viewModel::onAction  // The ViewModel will handle any user actions.
+        onAction = {action ->
+            when(action) {
+                RunOverviewAction.OnStartRunClick -> onStartRunClick()
+                else -> Unit
+            }
+            // The ViewModel will handle any user actions.
+            viewModel.onAction(action)
+        }
     )
 }
 

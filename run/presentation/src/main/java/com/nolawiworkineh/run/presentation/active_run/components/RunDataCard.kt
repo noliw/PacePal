@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nolawiworkineh.core.presentation.designsystem.PacePalBlack
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.presentation.ui.formatted
 import com.nolawiworkineh.presentation.ui.toFormattedKm
@@ -39,7 +40,7 @@ fun RunDataCard(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(15.dp))  // **Clip Shape**: Rounds the corners of the card.
-            .background(MaterialTheme.colorScheme.surface)  // **Background**: Sets the background color of the card.
+            .background(PacePalBlack)  // **Background**: Sets the background color of the card.
             .padding(16.dp),  // **Padding**: Adds space inside the card.
         horizontalAlignment = Alignment.CenterHorizontally  // **Alignment**: Centers the content horizontally.
     ) {
@@ -59,7 +60,7 @@ fun RunDataCard(
             // **Run Data Item for Distance**: Displays the distance.
             RunDataItem(
                 title = stringResource(id = R.string.distance),  // **Title**: "Distance".
-                value = (runData.distanceMeters / 1000.0).toFormattedKm(),  // **Value**: Formats the distance in kilometers.
+                value = if (runData.distanceMeters == 0) "-" else ((runData.distanceMeters / 1000.0).toFormattedKm()),  // **Value**: Formats the distance in kilometers.
                 modifier = Modifier
                     .defaultMinSize(minWidth = 75.dp)  // **Min Width**: Ensures the item has a minimum width.
             )

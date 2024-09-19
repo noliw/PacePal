@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.nolawiworkineh.run.presentation.active_run
 
@@ -27,11 +27,19 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 
 fun ActiveRunScreenRoot(
-    viewModel: ActiveRunViewModel = koinViewModel()
+    viewModel: ActiveRunViewModel = koinViewModel(),
+    onBackClick: () -> Unit
 ) {
     ActiveRunScreen(
         state = viewModel.state,
-        onAction = viewModel::onAction
+        onAction = { action ->
+            when (action) {
+                ActiveRunAction.OnBackClick -> onBackClick()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        }
+
     )
 }
 

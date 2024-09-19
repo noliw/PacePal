@@ -9,6 +9,7 @@ import androidx.navigation.navigation
 import com.nolawiworkineh.auth.presentation.intro.IntroScreenRoot
 import com.nolawiworkineh.auth.presentation.login.LoginScreenRoot
 import com.nolawiworkineh.auth.presentation.register.RegisterScreenRoot
+import com.nolawiworkineh.run.presentation.active_run.ActiveRunScreenRoot
 import com.nolawiworkineh.run.presentation.run_overview.RunOverviewRoot
 
 // **NavigationRoot Function**: This function is the main setup for moving between screens in the app.
@@ -115,7 +116,20 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
         route = "runFeature"
     ) {
         composable("run_overview") {
-            RunOverviewRoot()
+            RunOverviewRoot(
+                onStartRunClick = {
+                    navController.navigate("active_run")
+                }
+            )
+        }
+        composable("active_run") {
+            ActiveRunScreenRoot(
+                onBackClick = {
+                    navController.navigate("run_overview") {
+                        popUpTo("active_run") 
+                    }
+                }
+            )
         }
     }
 }
