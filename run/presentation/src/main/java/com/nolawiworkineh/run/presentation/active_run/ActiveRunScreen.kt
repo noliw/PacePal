@@ -3,9 +3,11 @@
 package com.nolawiworkineh.run.presentation.active_run
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,6 +30,8 @@ import com.nolawiworkineh.core.presentation.designsystem.components.PacePalScaff
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalToolbar
 import com.nolawiworkineh.run.presentation.R
 import com.nolawiworkineh.run.presentation.active_run.components.RunDataCard
+import com.nolawiworkineh.run.presentation.active_run.util.isLocationPermissionGranted
+import com.nolawiworkineh.run.presentation.active_run.util.isNotificationPermissionGranted
 import com.nolawiworkineh.run.presentation.active_run.util.shouldExplainLocationPermission
 import com.nolawiworkineh.run.presentation.active_run.util.shouldExplainNotificationPermission
 import org.koin.androidx.compose.koinViewModel
@@ -74,7 +78,7 @@ private fun ActiveRunScreen(
 
         // **Check notification permission**: Android 13 and above requires this permission.
         // For versions below 33, we don't need to ask, so it's always `true`.
-        val hasNotificationPermission = if (Build.VERSION.SDK_INT >= 33) {
+        val isNotificationPermissionGranted = if (Build.VERSION.SDK_INT >= 33) {
             perms[Manifest.permission.POST_NOTIFICATIONS] == true
         } else true
 
@@ -104,7 +108,7 @@ private fun ActiveRunScreen(
         onAction(
             ActiveRunAction.SubmitNotificationPermissionInfo(
                 // **acceptedNotificationPermission**: `true` if the notification permission was granted (or not needed).
-                acceptedNotificationPermission = hasNotificationPermission,
+                acceptedNotificationPermission = isNotificationPermissionGranted,
 
                 // **showNotificationPermissionRationale**: Indicates if we should show an explanation for notification permission.
                 showNotificationPermissionRationale = showNotificationRationale
@@ -155,6 +159,42 @@ private fun ActiveRunScreen(
     }
 
 }
+
+// Extension function for ActivityResultLauncher to handle multiple permissions for PacePal.
+private fun ActivityResultLauncher<Array<String>>.requestPacePalPermissions(
+    context: Context
+) {
+    // **isLocationPermissionGranted**: Check if location permissions (either fine or coarse) are already granted.
+    val isLocationPermissionGranted = context.isLocationPermissionGranted()
+
+    // **isNotificationPermissionGranted**: Check if notification permission is granted. For Android 13+ only.
+    val isNotificationPermissionGranted = context.isNotificationPermissionGranted()
+
+    // **locationPermissions**: Array containing the two location permissions that the app needs to request.
+    val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION, // **COARSE LOCATION**: Less accurate location data.
+        Manifest.permission.ACCESS_FINE_LOCATION    // **FINE LOCATION**: More accurate GPS data.
+    )
+
+    // **notificationPermission**: Only request notification permissions on Android 13+ (API level 33 or higher).
+    val notificationPermission = if (Build.VERSION.SDK_INT >= 33) {
+        arrayOf(Manifest.permission.POST_NOTIFICATIONS) // Request notification permissions for Android 13+.
+    } else arrayOf() // Empty array if the Android version is lower than 33 (no need for this permission).
+
+    // **when block**: Decide which permissions to request based on the current permission status.
+    when {
+        // **Case 1**: Neither location nor notification permissions are granted. Request both.
+        !isLocationPermissionGranted && !isNotificationPermissionGranted -> {
+            launch(locationPermissions + notificationPermission) // Launch permission dialog for both location and notifications.
+        }
+        // **Case 2**: Only location permissions are not granted. Request just the location permissions.
+        !isLocationPermissionGranted -> launch(locationPermissions) // Launch permission dialog for location permissions only.
+
+        // **Case 3**: Only notification permission is not granted. Request just the notification permission.
+        !isNotificationPermissionGranted -> launch(notificationPermission) // Launch permission dialog for notification permissions only.
+    }
+}
+
 
 @Preview
 @Composable
