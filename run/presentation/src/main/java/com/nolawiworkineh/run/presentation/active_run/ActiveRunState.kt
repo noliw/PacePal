@@ -12,6 +12,8 @@ data class ActiveRunState(
     val hasStartedRunning: Boolean = false,  // Indicates if the user has started running.
     val currentLocation: Location? = null,  // The user's current location (latitude, longitude).
     val isRunFinished: Boolean = false,  // Indicates if the user has finished their run.
-    val isSavingRun: Boolean = false  // Whether the app is currently saving the run data.
+    val isSavingRun: Boolean = false,  // Whether the app is currently saving the run data.
+    val showLocationRationale: Boolean = false,// Indicates if we should show a rationale(explanation) for location permissions.
+    val showNotificationRationale: Boolean = false // Indicates if we should show a rationale(explanation) for notification permissions.
 )
 
