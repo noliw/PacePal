@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.StartIcon
 import com.nolawiworkineh.core.presentation.designsystem.StopIcon
+import com.nolawiworkineh.core.presentation.designsystem.components.PacePalDialog
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalFloatingActionButton
+import com.nolawiworkineh.core.presentation.designsystem.components.PacePalOutlinedActionButton
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalScaffold
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalToolbar
 import com.nolawiworkineh.run.presentation.R
@@ -116,6 +119,44 @@ private fun ActiveRunScreen(
         )
     }
 
+    // **LaunchedEffect**: Runs the code inside this block when the screen is first composed or when the key changes.
+    // Here, it's set to always run when the screen is opened (since `key1 = true`).
+    LaunchedEffect(key1 = true) {
+
+        // **Convert Context to Activity**: The `context` is cast to `ComponentActivity` to access permission-related methods
+        // needed for checking permission status and rationale explanations.
+        val activity = context as ComponentActivity
+
+        // **showLocationRationale**: Determines if the app should show a rationale (explanation) for why location permissions are needed.
+        val showLocationRationale = activity.shouldExplainLocationPermission()
+
+        // **showNotificationRationale**: Determines if the app should show a rationale for notification permissions.
+        val showNotificationRationale = activity.shouldExplainNotificationPermission()
+
+        // **Submit location permission info**: Send the location permission status and whether we need to show a rationale.
+        onAction(
+            ActiveRunAction.SubmitLocationPermissionInfo(
+                acceptedLocationPermission = context.isLocationPermissionGranted(), // Checks if location permissions are granted.
+                showLocationRationale = showLocationRationale // Whether we should show an explanation to the user.
+            )
+        )
+
+        // **Submit notification permission info**: Send the notification permission status and whether we need to show a rationale.
+        onAction(
+            ActiveRunAction.SubmitNotificationPermissionInfo(
+                acceptedNotificationPermission = context.isNotificationPermissionGranted(), // Checks if notification permissions are granted.
+                showNotificationPermissionRationale = showNotificationRationale // Whether we should show an explanation to the user.
+            )
+        )
+
+        // **Re-request permissions**: If there is no rationale for either location or notification permissions, request them again.
+        if(!showLocationRationale && !showNotificationRationale) {
+            // **Request Permissions**: This will trigger the permission launcher to ask the user for the necessary permissions.
+            permissionLauncher.requestPacePalPermissions(context)
+        }
+    }
+
+
     PacePalScaffold(
         withGradient = false,
         topAppBar = {
@@ -134,7 +175,7 @@ private fun ActiveRunScreen(
                     onAction(ActiveRunAction.OnToggleRunClick)
                 },
                 iconSize = 20.dp,
-                contentDescription = if(state.isTracking) {
+                contentDescription = if (state.isTracking) {
                     stringResource(id = R.string.pause_run)
                 } else {
                     stringResource(id = R.string.start_run)
@@ -157,6 +198,55 @@ private fun ActiveRunScreen(
             )
         }
     }
+    // Check if we need to show a permission rationale dialog for location or notification permissions.
+    if (state.showLocationRationale || state.showNotificationRationale) {
+
+        // Display a custom dialog to explain why these permissions are necessary.
+        PacePalDialog(
+            // Set the title of the dialog to "Permission Required".
+            title = stringResource(id = R.string.permission_required),
+
+            // Disable normal dismissing for the dialog, as dismissing permission-related dialogs isn't allowed.
+            onDismiss = { /* Disable Dismissal: Normal dismissing not allowed for permissions */ },
+
+            // Set the description of the dialog based on which rationale(s) need to be shown.
+            description = when {
+                // If both location and notification permissions need a rationale, show a combined message.
+                state.showLocationRationale && state.showNotificationRationale -> {
+                    stringResource(id = R.string.location_notification_rationale)
+                }
+                // If only location permission needs a rationale, show the location-specific message.
+                state.showLocationRationale -> {
+                    stringResource(id = R.string.location_rationale)
+                }
+                // Otherwise, show the notification-specific message.
+                else -> {
+                    stringResource(id = R.string.notification_rationale)
+                }
+            },
+
+            // Define the primary button that the user clicks to proceed.
+            primaryButton = {
+                // Use an outlined action button to give the user a clear "Okay" option to move forward.
+                PacePalOutlinedActionButton(
+                    // The button label is set to "Okay".
+                    text = stringResource(id = R.string.okay),
+
+                    // The button isn't in a loading state, so set isLoading to false.
+                    isLoading = false,
+
+                    // When the button is clicked:
+                    onClick = {
+                        // Dismiss the rationale dialog by dispatching the DismissRationaleDialog action.
+                        onAction(ActiveRunAction.DismissRationaleDialog)
+
+                        // Re-initiate the permission request flow by launching the permission request function.
+                        permissionLauncher.requestPacePalPermissions(context)
+                    }
+                )
+            }
+        )
+    }
 
 }
 
@@ -166,21 +256,17 @@ private fun ActivityResultLauncher<Array<String>>.requestPacePalPermissions(
 ) {
     // **isLocationPermissionGranted**: Check if location permissions (either fine or coarse) are already granted.
     val isLocationPermissionGranted = context.isLocationPermissionGranted()
-
     // **isNotificationPermissionGranted**: Check if notification permission is granted. For Android 13+ only.
     val isNotificationPermissionGranted = context.isNotificationPermissionGranted()
-
     // **locationPermissions**: Array containing the two location permissions that the app needs to request.
     val locationPermissions = arrayOf(
         Manifest.permission.ACCESS_COARSE_LOCATION, // **COARSE LOCATION**: Less accurate location data.
         Manifest.permission.ACCESS_FINE_LOCATION    // **FINE LOCATION**: More accurate GPS data.
     )
-
     // **notificationPermission**: Only request notification permissions on Android 13+ (API level 33 or higher).
     val notificationPermission = if (Build.VERSION.SDK_INT >= 33) {
         arrayOf(Manifest.permission.POST_NOTIFICATIONS) // Request notification permissions for Android 13+.
     } else arrayOf() // Empty array if the Android version is lower than 33 (no need for this permission).
-
     // **when block**: Decide which permissions to request based on the current permission status.
     when {
         // **Case 1**: Neither location nor notification permissions are granted. Request both.
@@ -189,7 +275,6 @@ private fun ActivityResultLauncher<Array<String>>.requestPacePalPermissions(
         }
         // **Case 2**: Only location permissions are not granted. Request just the location permissions.
         !isLocationPermissionGranted -> launch(locationPermissions) // Launch permission dialog for location permissions only.
-
         // **Case 3**: Only notification permission is not granted. Request just the notification permission.
         !isNotificationPermissionGranted -> launch(notificationPermission) // Launch permission dialog for notification permissions only.
     }
