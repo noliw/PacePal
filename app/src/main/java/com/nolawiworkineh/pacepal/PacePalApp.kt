@@ -6,12 +6,17 @@ import com.nolawiworkineh.auth.presentation.di.authViewModelModule
 import com.nolawiworkineh.core.data.di.coreDataModule
 import com.nolawiworkineh.pacepal.di.appModule
 import com.nolawiworkineh.run.presentation.di.runViewModelModule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class PacePalApp : Application() {
+    //supervisor job means that each single coroutine we launch in this application scope will be running independently
+    // if one coroutine fails, we don't want all the other ones to fail.
+    val applicationScope = CoroutineScope(SupervisorJob())
     override fun onCreate() {
         super.onCreate()
         // **Initialize Timber for logging in debug mode**:
