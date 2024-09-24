@@ -2,13 +2,18 @@
 
 package com.nolawiworkineh.run.domain
 
+import com.nolawiworkineh.core.domain.Timer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlin.time.Duration
 
 // Core class responsible for tracking runs and managing state related to running
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -19,8 +24,19 @@ class RunningTracker(
     private val applicationScope: CoroutineScope
 ) {
 
-    // StateFlow to track whether the app is currently observing the user's location
+    // StateFlow to hold the data of the current run
+    private val _runData = MutableStateFlow(RunData()) // RunData holds distance, pace, etc.
+    val runData = _runData.asStateFlow() // Exposing the runData as an immutable flow
+
+    // StateFlow to track whether the app is currently tracking the run
+    private val isTracking = MutableStateFlow(false)
+
+    // StateFlow to track whether the app is observing the user's location
     private val isObservingLocation = MutableStateFlow(false)
+
+    // StateFlow to hold the elapsed time during the run
+    private val _elapsedTime = MutableStateFlow(Duration.ZERO)
+    val elapsedTime = _elapsedTime.asStateFlow() // Exposing elapsed time to observers
 
     // Flow that emits the current location based on whether location observation is enabled
     val currentLocation = isObservingLocation
@@ -43,6 +59,30 @@ class RunningTracker(
             // Initial value of the StateFlow, set to null since there's no location yet
             null
         )
+
+    // Initialization block to set up timers and tracking logic
+    init {
+        // Start the timer if tracking is active, and update the elapsed time
+        isTracking.flatMapLatest { isTracking ->
+                if (isTracking) {
+                    // Start the timer if tracking is true
+                    Timer.timeAndEmit()
+                } else {
+                    // If tracking is false, emit an empty flow (no time updates)
+                    flowOf()
+                }
+            }
+            .onEach { elapsed ->
+                // Add the emitted time from the timer to the elapsed time
+                _elapsedTime.value += elapsed
+            }
+            .launchIn(applicationScope) // Launch the flow in the application scope
+    }
+
+    // Function to start or stop tracking the run
+    fun setIsTracking(isTracking: Boolean) {
+        this.isTracking.value = isTracking
+    }
 
     // Function to start observing location
     fun startObservingLocation() {
