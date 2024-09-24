@@ -43,4 +43,15 @@ class RunningTracker(
             // Initial value of the StateFlow, set to null since there's no location yet
             null
         )
+
+    // Function to start observing location
+    fun startObservingLocation() {
+        isObservingLocation.value = true
+    }
+
+    // Function to stop observing location
+    fun stopObservingLocation() {
+        isObservingLocation.value = false
+    }
+
 }
