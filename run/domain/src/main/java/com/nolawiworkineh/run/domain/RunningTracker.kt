@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
+@file:OptIn(ExperimentalCoroutinesApi::class)
 
 package com.nolawiworkineh.run.domain
 
@@ -11,9 +11,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 
 // Core class responsible for tracking runs and managing state related to running
+@OptIn(ExperimentalCoroutinesApi::class)
 class RunningTracker(
     // Injecting the LocationObserver to observe location updates
     private val locationObserver: LocationObserver,
+    // Injecting the application-wide CoroutineScope
     private val applicationScope: CoroutineScope
 ) {
 
@@ -34,6 +36,7 @@ class RunningTracker(
         }
         // stateIn converts the flow into a StateFlow, sharing the latest location in the main UI thread
         .stateIn(
+            // Using the injected application-wide scope instead of manually creating one
             applicationScope,
             // Lazily starts the flow when it's first collected
             SharingStarted.Lazily,

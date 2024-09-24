@@ -27,6 +27,7 @@ val appModule = module {
         )
     }
 
+    // Providing the application-wide CoroutineScope
     single<CoroutineScope>{
         (androidApplication() as PacePalApp).applicationScope
     }

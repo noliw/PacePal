@@ -14,9 +14,10 @@ import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class PacePalApp : Application() {
-    //supervisor job means that each single coroutine we launch in this application scope will be running independently
-    // if one coroutine fails, we don't want all the other ones to fail.
+
+    // Defining an application-wide CoroutineScope with SupervisorJob
     val applicationScope = CoroutineScope(SupervisorJob())
+
     override fun onCreate() {
         super.onCreate()
         // **Initialize Timber for logging in debug mode**:
