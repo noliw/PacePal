@@ -3,7 +3,6 @@
 package com.nolawiworkineh.run.domain
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +13,8 @@ import kotlinx.coroutines.flow.stateIn
 // Core class responsible for tracking runs and managing state related to running
 class RunningTracker(
     // Injecting the LocationObserver to observe location updates
-    private val locationObserver: LocationObserver
+    private val locationObserver: LocationObserver,
+    private val applicationScope: CoroutineScope
 ) {
 
     // StateFlow to track whether the app is currently observing the user's location
@@ -34,8 +34,7 @@ class RunningTracker(
         }
         // stateIn converts the flow into a StateFlow, sharing the latest location in the main UI thread
         .stateIn(
-            // CoroutineScope tied to the Main dispatcher, meaning it runs on the main thread
-            CoroutineScope(Dispatchers.Main),
+            applicationScope,
             // Lazily starts the flow when it's first collected
             SharingStarted.Lazily,
             // Initial value of the StateFlow, set to null since there's no location yet
