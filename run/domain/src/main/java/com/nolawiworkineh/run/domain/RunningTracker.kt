@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.zip
+import kotlin.math.roundToInt
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -162,4 +163,12 @@ class RunningTracker(
         isObservingLocation.value = false
     }
 
+
+}
+
+private fun <T> List<List<T>>.replaceLast(replacement: List<T>): List<List<T>> {
+    if(this.isEmpty()) {
+        return listOf(replacement)
+    }
+    return this.dropLast(1) + listOf(replacement)
 }
