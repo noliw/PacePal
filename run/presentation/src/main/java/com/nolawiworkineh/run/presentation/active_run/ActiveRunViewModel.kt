@@ -10,6 +10,7 @@ import com.nolawiworkineh.run.domain.RunningTracker
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -34,12 +35,19 @@ class ActiveRunViewModel(
         .stateIn(viewModelScope, SharingStarted.Lazily, state.isTracking)
 
     // **Location Permission Tracking**: Tracks if the user has granted location permission using a StateFlow.
-    private val _hasUserGrantedLocationPermission = MutableStateFlow(false)
+    private val hasUserGrantedLocationPermission = MutableStateFlow(false)
+
+    private val isTracking = combine(
+        shouldTrack,
+        hasUserGrantedLocationPermission
+    ) { shouldTrack, hasUserGrantedLocationPermission ->
+        shouldTrack && hasUserGrantedLocationPermission
+    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     // Initializer block where we observe the location permission state
     init {
         // Observe changes in location permission
-        _hasUserGrantedLocationPermission.onEach { hasPermission ->
+        hasUserGrantedLocationPermission.onEach { hasPermission ->
                 // If the app has location permission, start observing location updates
                 if (hasPermission) {
                     runningTracker.startObservingLocation()
@@ -52,6 +60,32 @@ class ActiveRunViewModel(
             .launchIn(viewModelScope) // Launch in the ViewModel's scope to handle lifecycle automatically
 
 
+        isTracking
+            .onEach { isTracking ->
+                runningTracker.setIsTracking(isTracking)
+            }
+            .launchIn(viewModelScope)
+
+        runningTracker
+            .currentLocation
+            .onEach {
+                state = state.copy(currentLocation = it?.location)
+            }
+            .launchIn(viewModelScope)
+
+        runningTracker
+            .runData
+            .onEach {
+                state = state.copy(runData = it)
+            }
+            .launchIn(viewModelScope)
+
+        runningTracker
+            .elapsedTime
+            .onEach {
+                state = state.copy(elapsedTime = it)
+            }
+            .launchIn(viewModelScope)
     }
 
     // **onAction Function**: Handles the actions taken by the user, like starting/stopping a run or dealing with permissions.
@@ -62,19 +96,22 @@ class ActiveRunViewModel(
                 // Code to finish run will go here.
             }
 
-            // **Resume Run Action**: Placeholder for the logic to resume a paused run.
             ActiveRunAction.OnResumeRunClick -> {
-                // Code to resume run will go here.
+                state = state.copy(isTracking = true)
             }
-
-            // **Toggle Run Action**: Placeholder for the logic to toggle between starting and stopping a run.
+            ActiveRunAction.OnBackClick -> {
+                state = state.copy(isTracking = false)
+            }
             ActiveRunAction.OnToggleRunClick -> {
-                // Code to toggle run will go here.
+                state = state.copy(
+                    hasStartedRunning = true,
+                    isTracking = !state.isTracking
+                )
             }
             // **Submit Location Permission Info**: Updates the location permission state and whether to show rationale.
             is ActiveRunAction.SubmitLocationPermissionInfo -> {
                 // Update the StateFlow tracking location permission.
-                _hasUserGrantedLocationPermission.value = action.acceptedLocationPermission
+                hasUserGrantedLocationPermission.value = action.acceptedLocationPermission
 
                 // Update the state with the new location rationale information.
                 state = state.copy(
