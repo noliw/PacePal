@@ -3,15 +3,17 @@ package com.nolawiworkineh.run.presentation.active_run
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nolawiworkineh.run.domain.RunningTracker
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
-import timber.log.Timber
+import kotlinx.coroutines.flow.stateIn
 
 class ActiveRunViewModel(
     // Injecting the RunningTracker
@@ -27,6 +29,9 @@ class ActiveRunViewModel(
 
     // **Flow for Events**: The UI listens to this flow for events like showing errors or handling success messages.
     val events = eventChannel.receiveAsFlow()
+
+    private val shouldTrack = snapshotFlow { state.isTracking }
+        .stateIn(viewModelScope, SharingStarted.Lazily, state.isTracking)
 
     // **Location Permission Tracking**: Tracks if the user has granted location permission using a StateFlow.
     private val _hasUserGrantedLocationPermission = MutableStateFlow(false)
@@ -46,12 +51,7 @@ class ActiveRunViewModel(
             }
             .launchIn(viewModelScope) // Launch in the ViewModel's scope to handle lifecycle automatically
 
-        runningTracker
-            .currentLocation
-            .onEach { location ->
-                Timber.d("New location: $location")
-            }
-            .launchIn(viewModelScope)
+
     }
 
     // **onAction Function**: Handles the actions taken by the user, like starting/stopping a run or dealing with permissions.

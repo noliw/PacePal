@@ -35,7 +35,7 @@ fun NavigationRoot(
 }
 
 // **authGraph Function**: This function organizes all the routes (or paths) related to the authentication part of the app.
-private fun NavGraphBuilder.authGraph(navController: NavHostController) {
+private fun NavGraphBuilder.authGraph(navController: NavHostController)     {
     navigation(
         // **startDestination**: Inside the "auth" section, the first screen the user sees is the "intro" screen.
         startDestination = "introScreen",

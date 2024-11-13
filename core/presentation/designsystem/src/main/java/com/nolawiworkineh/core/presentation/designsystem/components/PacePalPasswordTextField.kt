@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text2.BasicSecureTextField
 import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.foundation.text2.input.TextObfuscationMode
+import androidx.compose.foundation.text2.input.rememberTextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -36,10 +37,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nolawiworkineh.core.presentation.designsystem.EyeClosedIcon
 import com.nolawiworkineh.core.presentation.designsystem.EyeOpenedIcon
 import com.nolawiworkineh.core.presentation.designsystem.LockIcon
+import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.R
 
 // **PacePalPasswordTextField Composable**: A custom text field specifically for password input in the Pacepal app.
@@ -189,18 +192,18 @@ fun PacePalPasswordTextField(
 }
 
 
-//@Preview
-//@Composable
-//private fun PacePalTextFieldPreview() {
-//    PacePalTheme {
-//        PacePalPasswordTextField(
-//            state = rememberTextFieldState(),
-//            hint = "password",
-//            title = "Password",
-//            modifier = Modifier
-//                .fillMaxWidth(),
-//            isPasswordVisible = false,
-//            onTogglePasswordVisibility = {}
-//        )
-//    }
-//}
+@Preview
+@Composable
+private fun PacePalTextFieldPreview() {
+    PacePalTheme {
+        PacePalPasswordTextField(
+            state = rememberTextFieldState(),
+            hint = "password",
+            title = "Password",
+            modifier = Modifier
+                .fillMaxWidth(),
+            isPasswordVisible = false,
+            onTogglePasswordVisibility = {}
+        )
+    }
+}
