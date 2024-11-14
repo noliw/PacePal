@@ -48,17 +48,20 @@ fun ActiveRunScreenRoot(
 ) {
     ActiveRunScreen(
         state = viewModel.state,
-        onAction = { action ->
-            when (action) {
-                ActiveRunAction.OnBackClick -> onBackClick()
-                else -> Unit
-            }
-            viewModel.onAction(action)
-        }
+        onAction = viewModel::onAction
+
+//        { action ->
+//            when (action) {
+//                ActiveRunAction.OnBackClick -> onBackClick()
+//                else -> Unit
+//            }
+//            viewModel.onAction(action)
+//        }
 
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 private fun ActiveRunScreen(

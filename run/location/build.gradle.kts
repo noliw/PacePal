@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(projects.run.domain)
+    implementation(libs.bundles.koin)
     implementation(projects.core.domain)
     implementation(libs.androidx.core.ktx)
 

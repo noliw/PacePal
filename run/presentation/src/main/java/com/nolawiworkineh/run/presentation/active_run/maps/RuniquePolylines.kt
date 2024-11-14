@@ -28,8 +28,8 @@ fun RuniquePolylines(locations: List<List<LocationTimestamp>>) {
         polyline.forEach { polylineUi ->
             Polyline(
                 points = listOf(
-                    LatLng(polylineUi.location1.lat, polylineUi.location1.long),
-                    LatLng(polylineUi.location2.lat, polylineUi.location2.long),
+                    LatLng(polylineUi.location1.latitude, polylineUi.location1.longitude),
+                    LatLng(polylineUi.location2.latitude, polylineUi.location2.longitude),
                 ),
                 color = polylineUi.color,
                 jointType = JointType.BEVEL

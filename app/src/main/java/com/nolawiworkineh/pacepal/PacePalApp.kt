@@ -5,6 +5,7 @@ import com.nolawiworkineh.auth.data.di.authDataModule
 import com.nolawiworkineh.auth.presentation.di.authViewModelModule
 import com.nolawiworkineh.core.data.di.coreDataModule
 import com.nolawiworkineh.pacepal.di.appModule
+import com.nolawiworkineh.run.location.di.locationModule
 import com.nolawiworkineh.run.presentation.di.runViewModelModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -36,7 +37,8 @@ class PacePalApp : Application() {
                 authViewModelModule, // Injects dependencies for the auth ViewModels
                 appModule, // Provides global dependencies for the app
                 coreDataModule, // Injects dependencies for the core data layer
-                runViewModelModule
+                runViewModelModule,
+                locationModule
             )
         }
     }
