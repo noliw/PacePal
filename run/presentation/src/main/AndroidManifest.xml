@@ -10,5 +10,9 @@
     <!-- Permission to post notifications, required for Android 13 and above -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <application>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="${MAPS_API_KEY}" />
+    </application>
+
 
 </manifest>

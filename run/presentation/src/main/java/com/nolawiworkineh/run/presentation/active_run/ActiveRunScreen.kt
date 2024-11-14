@@ -33,6 +33,7 @@ import com.nolawiworkineh.core.presentation.designsystem.components.PacePalScaff
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalToolbar
 import com.nolawiworkineh.run.presentation.R
 import com.nolawiworkineh.run.presentation.active_run.components.RunDataCard
+import com.nolawiworkineh.run.presentation.active_run.maps.TrackerMap
 import com.nolawiworkineh.run.presentation.active_run.util.isLocationPermissionGranted
 import com.nolawiworkineh.run.presentation.active_run.util.isNotificationPermissionGranted
 import com.nolawiworkineh.run.presentation.active_run.util.shouldExplainLocationPermission
@@ -188,6 +189,14 @@ private fun ActiveRunScreen(
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
         ) {
+            TrackerMap(
+                isRunFinished = state.isRunFinished,
+                currentLocation = state.currentLocation,
+                locations = state.runData.locations,
+                onSnapshot = {},
+                modifier = Modifier
+                    .fillMaxSize()
+            )
             RunDataCard(
                 elapsedTime = state.elapsedTime,
                 runData = state.runData,

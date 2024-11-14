@@ -29,6 +29,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.nolawiworkineh.core.domain.location.Location
 import com.nolawiworkineh.core.domain.location.LocationTimestamp
+import com.nolawiworkineh.core.presentation.designsystem.PacePalBlue
 import com.nolawiworkineh.core.presentation.designsystem.RunIcon
 import com.nolawiworkineh.run.presentation.R
 
@@ -94,7 +95,7 @@ fun TrackerMap(
                     modifier = Modifier
                         .size(35.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary),
+                        .background(PacePalBlue),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
