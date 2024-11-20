@@ -70,7 +70,19 @@ class RunningTracker(
     // Initialization block to set up timers and tracking logic
     init {
         // Start the timer if tracking is active, and update the elapsed time
-        isTracking.flatMapLatest { isTracking ->
+        isTracking
+            .onEach { isTracking ->
+                if(!isTracking) {
+                    val newList = buildList {
+                        addAll(runData.value.locations)
+                        add(emptyList<LocationTimestamp>())
+                    }.toList()
+                    _runData.update { it.copy(
+                        locations = newList
+                    ) }
+                }
+            }
+            .flatMapLatest { isTracking ->
                 if (isTracking) {
                     // Start the timer if tracking is true
                     Timer.timeAndEmit()
