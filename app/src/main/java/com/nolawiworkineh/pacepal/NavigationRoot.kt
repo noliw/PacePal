@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
 import com.nolawiworkineh.auth.presentation.intro.IntroScreenRoot
 import com.nolawiworkineh.auth.presentation.login.LoginScreenRoot
@@ -122,7 +123,14 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                 }
             )
         }
-        composable("active_run") {
+        composable(
+            route = "active_run",
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "pacepal://active_run"
+                }
+            )
+        ) {
             ActiveRunScreenRoot(
                 onBackClick = {
                     navController.navigate("run_overview") {
