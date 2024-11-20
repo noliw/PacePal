@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.nolawiworkineh.core.presentation.designsystem.PacePalTheme
 import com.nolawiworkineh.core.presentation.designsystem.StartIcon
 import com.nolawiworkineh.core.presentation.designsystem.StopIcon
+import com.nolawiworkineh.core.presentation.designsystem.components.PacePalActionButton
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalDialog
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalFloatingActionButton
 import com.nolawiworkineh.core.presentation.designsystem.components.PacePalOutlinedActionButton
@@ -210,6 +211,36 @@ private fun ActiveRunScreen(
             )
         }
     }
+    if (!state.isTracking && state.hasStartedRunning) {
+        PacePalDialog(
+            title = stringResource(id = R.string.running_is_paused),
+            onDismiss = {
+                onAction(ActiveRunAction.OnResumeRunClick)
+            },
+            description = stringResource(id = R.string.resume_or_finish_run),
+            primaryButton = {
+                PacePalActionButton(
+                    text = stringResource(id = R.string.resume),
+                    isLoading = false,
+                    onClick = {
+                        onAction(ActiveRunAction.OnResumeRunClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            },
+            secondaryButton = {
+                PacePalOutlinedActionButton(
+                    text = stringResource(id = R.string.finish),
+                    isLoading = state.isSavingRun,
+                    onClick = {
+                        onAction(ActiveRunAction.OnFinishRunClick)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        )
+    }
+
     // Check if we need to show a permission rationale dialog for location or notification permissions.
     if (state.showLocationRationale || state.showNotificationRationale) {
 

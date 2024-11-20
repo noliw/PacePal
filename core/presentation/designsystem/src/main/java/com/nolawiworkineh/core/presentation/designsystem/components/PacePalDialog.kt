@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,9 +25,9 @@ fun PacePalDialog(
     title: String,  // **Title**: The dialog's title (e.g., "Confirmation").
     onDismiss: () -> Unit,  // **onDismiss**: Function triggered when the user dismisses the dialog.
     description: String,  // **Description**: The dialog's main message to the user.
-    primaryButton: @Composable () -> Unit,  //  Main button action (e.g., "Confirm").
+    primaryButton: @Composable RowScope.() -> Unit,  //  Main button action (e.g., "Confirm").
     modifier: Modifier = Modifier, //Allows modification of the dialog's UI (e.g., padding, size).
-    secondaryButton: @Composable () -> Unit = {} //Optional secondary button action (e.g., "Cancel").
+    secondaryButton: @Composable RowScope.() -> Unit = {} //Optional secondary button action (e.g., "Cancel").
 ) {
     // **Dialog Component**: Shows a system dialog.
     Dialog(onDismissRequest = onDismiss) {
