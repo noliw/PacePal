@@ -1,6 +1,7 @@
 package com.nolawiworkineh.pacepal
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,6 +12,7 @@ import com.nolawiworkineh.auth.presentation.intro.IntroScreenRoot
 import com.nolawiworkineh.auth.presentation.login.LoginScreenRoot
 import com.nolawiworkineh.auth.presentation.register.RegisterScreenRoot
 import com.nolawiworkineh.run.presentation.active_run.ActiveRunScreenRoot
+import com.nolawiworkineh.run.presentation.active_run.service.ActiveRunService
 import com.nolawiworkineh.run.presentation.run_overview.RunOverviewRoot
 
 // **NavigationRoot Function**: This function is the main setup for moving between screens in the app.
@@ -131,10 +133,25 @@ private fun NavGraphBuilder.runGraph(navController: NavHostController) {
                 }
             )
         ) {
+            val context = LocalContext.current
             ActiveRunScreenRoot(
                 onBackClick = {
                     navController.navigate("run_overview") {
                         popUpTo("active_run") 
+                    }
+                },
+                onServiceToggle = { shouldServiceRun ->
+                    if(shouldServiceRun) {
+                        context.startService(
+                            ActiveRunService.createStartIntent(
+                                context = context,
+                                activityClass = MainActivity::class.java
+                            )
+                        )
+                    } else {
+                        context.startService(
+                            ActiveRunService.createStopIntent(context = context,)
+                        )
                     }
                 }
             )

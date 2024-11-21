@@ -7,6 +7,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nolawiworkineh.run.domain.RunningTracker
+import com.nolawiworkineh.run.presentation.active_run.service.ActiveRunService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +23,10 @@ class ActiveRunViewModel(
 ): ViewModel() {
 
     // **State Property**: Holds the current state of the active run, like elapsed time, run data, permissions, etc.
-    var state by mutableStateOf(ActiveRunState())
+    var state by mutableStateOf(ActiveRunState(
+        isTracking = ActiveRunService.isServiceActive && runningTracker.isTracking.value,
+        hasStartedRunning = ActiveRunService.isServiceActive
+    ))
         private set  // **Private Setter**: The state can only be modified inside the ViewModel to ensure controlled changes.
 
     // **Event Channel**: Used to send one-time events like errors or success messages to the UI.
@@ -133,6 +137,13 @@ class ActiveRunViewModel(
             }
             // **Default Case**: If no matching action is found, do nothing.
             else -> Unit
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if(!ActiveRunService.isServiceActive) {
+            runningTracker.stopObservingLocation()
         }
     }
 }

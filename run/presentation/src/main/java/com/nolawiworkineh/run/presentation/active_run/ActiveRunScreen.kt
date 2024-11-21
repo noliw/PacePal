@@ -336,6 +336,7 @@ private fun ActiveRunScreenPreview() {
     PacePalTheme {
         ActiveRunScreen(
             state = ActiveRunState(),
+            onServiceToggle = {},
             onAction = {}
         )
     }
