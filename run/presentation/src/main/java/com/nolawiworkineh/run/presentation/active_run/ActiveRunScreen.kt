@@ -35,6 +35,7 @@ import com.nolawiworkineh.core.presentation.designsystem.components.PacePalToolb
 import com.nolawiworkineh.run.presentation.R
 import com.nolawiworkineh.run.presentation.active_run.components.RunDataCard
 import com.nolawiworkineh.run.presentation.active_run.maps.TrackerMap
+import com.nolawiworkineh.run.presentation.active_run.service.ActiveRunService
 import com.nolawiworkineh.run.presentation.active_run.util.isLocationPermissionGranted
 import com.nolawiworkineh.run.presentation.active_run.util.isNotificationPermissionGranted
 import com.nolawiworkineh.run.presentation.active_run.util.shouldExplainLocationPermission
@@ -45,20 +46,13 @@ import org.koin.androidx.compose.koinViewModel
 
 fun ActiveRunScreenRoot(
     viewModel: ActiveRunViewModel = koinViewModel(),
+    onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onBackClick: () -> Unit
 ) {
     ActiveRunScreen(
         state = viewModel.state,
+        onServiceToggle = onServiceToggle,
         onAction = viewModel::onAction
-
-//        { action ->
-//            when (action) {
-//                ActiveRunAction.OnBackClick -> onBackClick()
-//                else -> Unit
-//            }
-//            viewModel.onAction(action)
-//        }
-
     )
 }
 
@@ -67,6 +61,7 @@ fun ActiveRunScreenRoot(
 
 private fun ActiveRunScreen(
     state: ActiveRunState,
+    onServiceToggle: (isServiceRunning: Boolean)-> Unit,
     onAction: (ActiveRunAction) -> Unit
 ) {
     // **Get the current context**: The context represents the current state of the application or activity.
@@ -161,6 +156,17 @@ private fun ActiveRunScreen(
         }
     }
 
+    LaunchedEffect(key1 = state.isRunFinished) {
+        if(state.isRunFinished) {
+            onServiceToggle(false)
+        }
+    }
+
+    LaunchedEffect(key1 = state.isTracking) {
+        if(context.isLocationPermissionGranted() && state.isTracking && !ActiveRunService.isServiceActive) {
+            onServiceToggle(true)
+        }
+    }
 
     PacePalScaffold(
         withGradient = false,
