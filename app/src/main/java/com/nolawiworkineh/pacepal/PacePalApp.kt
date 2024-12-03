@@ -4,6 +4,7 @@ import android.app.Application
 import com.nolawiworkineh.auth.data.di.authDataModule
 import com.nolawiworkineh.auth.presentation.di.authViewModelModule
 import com.nolawiworkineh.core.data.di.coreDataModule
+import com.nolawiworkineh.core.database.di.databaseModule
 import com.nolawiworkineh.pacepal.di.appModule
 import com.nolawiworkineh.run.location.di.locationModule
 import com.nolawiworkineh.run.presentation.di.runViewModelModule
@@ -38,7 +39,8 @@ class PacePalApp : Application() {
                 appModule, // Provides global dependencies for the app
                 coreDataModule, // Injects dependencies for the core data layer
                 runViewModelModule,
-                locationModule
+                locationModule,
+                databaseModule
             )
         }
     }
