@@ -84,7 +84,8 @@ fun TrackerMap(
         ),
         uiSettings = MapUiSettings(
             zoomControlsEnabled = false
-        )
+        ),
+        modifier = modifier
     ) {
         RuniquePolylines(locations = locations)
         if(!isRunFinished && currentLocation != null) {
