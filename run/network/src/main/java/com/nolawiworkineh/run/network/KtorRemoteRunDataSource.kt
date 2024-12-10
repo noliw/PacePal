@@ -1,16 +1,23 @@
 package com.nolawiworkineh.run.network
 
 import com.nolawiworkineh.core.data.networking.constructRoute
+import com.nolawiworkineh.core.data.networking.delete
+import com.nolawiworkineh.core.data.networking.get
 import com.nolawiworkineh.core.data.networking.safeCall
 import com.nolawiworkineh.core.domain.run.RemoteRunDataSource
 import com.nolawiworkineh.core.domain.run.Run
 import com.nolawiworkineh.core.domain.util.DataError
+import com.nolawiworkineh.core.domain.util.EmptyDataResult
+import com.nolawiworkineh.core.domain.util.Result
+import com.nolawiworkineh.core.domain.util.map
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class KtorRemoteRunDataSource(
     private val httpClient: HttpClient
@@ -48,7 +55,7 @@ class KtorRemoteRunDataSource(
         }
     }
 
-    override suspend fun deleteRun(id: String): EmptyResult<DataError.Network> {
+    override suspend fun deleteRun(id: String): EmptyDataResult<DataError.Network> {
         return httpClient.delete(
             route = "/run",
             queryParameters = mapOf(
