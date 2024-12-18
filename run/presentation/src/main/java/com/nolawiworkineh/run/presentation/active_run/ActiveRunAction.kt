@@ -30,4 +30,6 @@ interface ActiveRunAction {
     // **DismissRationaleDialog**: Action triggered when the user dismisses a rationale dialog,
     // which explains why the app needs certain permissions.
     data object DismissRationaleDialog: ActiveRunAction
+
+    class OnRunProcessed(val mapPictureBytes: ByteArray): ActiveRunAction
 }
