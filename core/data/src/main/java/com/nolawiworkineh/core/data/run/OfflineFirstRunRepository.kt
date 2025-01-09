@@ -80,6 +80,13 @@ class OfflineFirstRunRepository(
 
 
     override suspend fun deleteRun(id: RunId) {
-        TODO("Not yet implemented")
+        // Step 1: Delete the run from the local database
+        localRunDataSource.deleteRun(id)
+
+        // Step 2: Attempt to delete the run from the remote server asynchronously
+        val remoteResult = applicationScope.async {
+            remoteRunDataSource.deleteRun(id)
+        }.await()
     }
+
 }
