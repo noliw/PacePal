@@ -7,6 +7,7 @@ import com.nolawiworkineh.core.data.di.coreDataModule
 import com.nolawiworkineh.core.database.di.databaseModule
 import com.nolawiworkineh.pacepal.di.appModule
 import com.nolawiworkineh.run.location.di.locationModule
+import com.nolawiworkineh.run.network.di.networkModule
 import com.nolawiworkineh.run.presentation.di.runViewModelModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -40,7 +41,8 @@ class PacePalApp : Application() {
                 coreDataModule, // Injects dependencies for the core data layer
                 runViewModelModule,
                 locationModule,
-                databaseModule
+                databaseModule,
+                networkModule,
             )
         }
     }
