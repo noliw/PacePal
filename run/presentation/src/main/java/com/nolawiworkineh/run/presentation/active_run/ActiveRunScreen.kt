@@ -54,31 +54,41 @@ fun ActiveRunScreenRoot(
     onServiceToggle: (isServiceRunning: Boolean) -> Unit,
     onBackClick: () -> Unit
 ) {
+    // Get the current context (required for displaying Toast messages)
     val context = LocalContext.current
+
+    // Observe events emitted by the ViewModel
     ObserveAsEvents(flow = viewModel.events) { event ->
-        when(event) {
+        when (event) {
+            // If an error event is emitted, show a Toast with the error message
             is ActiveRunEvent.Error -> {
                 Toast.makeText(
                     context,
-                    event.error.asString(context),
+                    event.error.asString(context), // Converts the error to a user-readable string
                     Toast.LENGTH_LONG
                 ).show()
             }
+
+            // If a run-saving event is emitted, trigger the onFinish callback
             ActiveRunEvent.RunSaved -> onFinish()
         }
     }
+
+    // Render the ActiveRunScreen composable
     ActiveRunScreen(
-        state = viewModel.state,
-        onServiceToggle = onServiceToggle,
-        onAction = { action ->
-            when(action) {
+        state = viewModel.state, // Pass the state from the ViewModel to the UI
+        onServiceToggle = onServiceToggle, // Pass the service toggle callback to the UI
+        onAction = { action -> // Handle actions from the UI
+            when (action) {
+                // Handle the back button click
                 is ActiveRunAction.OnBackClick -> {
-                    if(!viewModel.state.hasStartedRunning) {
+                    if (!viewModel.state.hasStartedRunning) { // Allow back navigation only if the run hasn't started
                         onBackClick()
                     }
                 }
-                else -> Unit
+                else -> Unit // No other actions are handled here
             }
+            // Send the action to the ViewModel for further processing
             viewModel.onAction(action)
         }
     )
