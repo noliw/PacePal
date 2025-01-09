@@ -13,4 +13,5 @@ dependencies {
     implementation(libs.google.maps.android.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.timber)
+    implementation(project(":auth:presentation"))
 }

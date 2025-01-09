@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nolawiworkineh.core.domain.location.Location
 import com.nolawiworkineh.core.domain.run.Run
+import com.nolawiworkineh.core.domain.run.RunRepository
+import com.nolawiworkineh.core.domain.util.Result
+import com.nolawiworkineh.presentation.ui.toUiText
 import com.nolawiworkineh.run.domain.LocationDataCalculator
 import com.nolawiworkineh.run.domain.RunningTracker
 import com.nolawiworkineh.run.presentation.active_run.service.ActiveRunService
@@ -25,7 +28,8 @@ import java.time.ZonedDateTime
 
 class ActiveRunViewModel(
     // Injecting the RunningTracker
-    private val runningTracker: RunningTracker
+    private val runningTracker: RunningTracker,
+    private val runRepository: RunRepository
 ): ViewModel() {
 
     // **State Property**: Holds the current state of the active run, like elapsed time, run data, permissions, etc.
@@ -170,9 +174,17 @@ class ActiveRunViewModel(
                 totalElevationMeters = LocationDataCalculator.getTotalElevationMeters(locations),
                 mapPictureUrl = null
             )
-
-            // Save run in repository
             runningTracker.finishRun()
+
+            when(val result = runRepository.upsertRun(run, mapPictureBytes)) {
+                is Result.Error -> {
+                    eventChannel.send(ActiveRunEvent.Error(result.error.toUiText()))
+                }
+                is Result.Success -> {
+                    eventChannel.send(ActiveRunEvent.RunSaved)
+                }
+            }
+
             state = state.copy(isSavingRun = false)
         }
     }
